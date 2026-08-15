@@ -79,3 +79,7 @@ Marka işareti, Hermes’in hız/gönderi çağrışımını doğrudan figürle�
 - **UI renk kuralı:** Tüm arayüz yüzeyleri ve tipografi, yalnızca sıcak kâğıt, siyah ve Signal Yellow `#F5C518` kullanacaktır. Yeşil, kırmızı, mavi ve teal yalnızca içe aktarılan illüstrasyonların içinde kalacaktır.
 - **Botanik kuralı:** Botanik varlıklar grid sınırını kesen, kenardan kırpılmış ikincil motiflerdir; işlevsel hücre ya da bölümün baskın görsel dili olmayacaklardır.
 - **Teknik çizim kuralı:** Her ana bölüm; koordinat etiketi, ölçüm işareti, kayıt noktası, kural çizgisi veya sistem durumu ibaresinden en az biriyle tek mühendislik çizim setinin parçası gibi davranacaktır.
+
+- **Görselsiz yüzey kararı:** Kullanıcı talebi doğrultusunda hero dâhil hiçbir görüntü dosyası kullanılmayacaktır. Blueprint karakteri, yalnızca tipografi, CSS tabanlı rota çizgileri, düğüm noktaları, ölçüm ızgaraları ve geometrik modüllerle kurulacaktır.
+- **Marka işareti kuralı:** Hermes markası; siyah yüzey üzerindeki negatif alan `H`, kesişen rota çağrışımı ve sarı yön noktasıyla oluşturulacak; düz harf monogramına indirgenmeyecektir.
+- **Kayıt hiyerarşisi kuralı:** Uzun müşteri geri bildirimleri eşit ağırlıklı kart duvarı olarak değil; kolon etiketleri, öne çıkan kayıtlar ve varyasyonlu teknik işaretlerle düzenlenmiş alan notları olarak sunulacaktır.

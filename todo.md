@@ -1,5 +1,14 @@
 # Hermes Software — Görsel Revizyonu
 
+## Görselsiz Blueprint ve çok dilli geri bildirim revizyonu
+
+- [x] Hero, proje ve iletişim alanlarındaki tüm görsel varlık kullanımlarını tespit et.
+- [x] Görsel bileşenlerini CSS/HTML tabanlı teknik çizim ve geometrik yüzeylerle değiştir.
+- [x] Her desteklenen arayüz dili için özgün geri bildirim çevirilerini ekle.
+- [x] Asenkron yorum akışının hareket sürelerini ölçülü biçimde azalt.
+- [x] Masaüstü ve mobil görünüm ile production build doğrulamasını tamamla.
+- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+
 ## Geri bildirim ve hareket revizyonu
 
 - [x] Kullanıcının sağladığı 20 geri bildirimi üç dengeli kolona dağıt.
@@ -17,7 +26,7 @@
 - [x] Yeni checkpoint oluştur ve kullanıcıya ilet.
 
 ## Kapsam kararı
-Kullanıcı tarafından verilen ana illüstrasyon ile botanik görselleri kaldırıldı. Hermes için üretilen marka işareti, hero blueprint, project schematic ve output signal varlıkları korunuyor.
+Kullanıcı tarafından verilen ana illüstrasyon ile botanik görselleri kaldırıldı. Sonraki revizyonda hero, proje ve output dâhil tüm görsel dosyası referansları da temizlendi; yüzeyler yalnızca CSS/HTML tabanlı Blueprint geometrileriyle kuruluyor.
 
 ## Doğrulama
 - Kullanıcı görsel kullanımı: kod taramasında eşleşme yok
