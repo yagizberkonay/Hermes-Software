@@ -3,7 +3,7 @@
  * Warm drafting-paper background, hard black geometry, Signal Yellow only for interaction,
  * and conspicuous negative space are non-negotiable in this page.
  */
-import { animate, motion, useMotionValue, useReducedMotion } from "framer-motion";
+import { animate, motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -322,6 +322,31 @@ const projects = [
   },
 ] as const;
 
+const clientSignals = [
+  "İlk başta tasarım tarafında ne istediğimi ben de tam bilmiyordum. Birkaç örnek üzerinden ilerleyince neyin eksik olduğunu hızlıca çıkardı.",
+  "Teslimden sonra iki küçük değişiklik istedim, ikisini de mevcut yapıyı bozmadan halletti. Özellikle bu kısmı beğendim.",
+  "Benim için önemli olan sitenin güzel görünmesinden çok sonradan bir şey değiştirebiliyor olmaktı. Yönetim tarafını buna göre kurmuş.",
+  "Toplantılarda teknik detaylara fazla girmeden neyin neden yapıldığını anlatması işimizi kolaylaştırdı.",
+  "Mobil versiyonda ilk gönderdiği tasarımda birkaç problem vardı. Söylediğimde savunmaya geçmek yerine direkt düzeltti.",
+  "Projeyi sadece verilen brief’e göre yapmadı; bazı noktalarda bizim istediğimiz şeyin aslında gereksiz olduğunu söyledi. İyi ki söylemiş.",
+  "Daha önce iki farklı yazılımcıyla çalıştığımız için beklentimiz çok yüksek değildi açıkçası. Burada süreç daha düzenli ilerledi.",
+  "Kod tarafını görmedim ama son kullanıcı açısından önceki sisteme göre bariz şekilde daha hızlı ve anlaşılır.",
+  "Başta küçük bir proje olarak başladık, sonradan birkaç özelliği daha ekledik. Yapının buna izin vermesi işimizi kolaylaştırdı.",
+  "Her şeyi tek seferde doğru yapmadı ama önemli olan sorun çıktığında kaybolmamasıydı. İletişim tarafında problem yaşamadık.",
+  "Tasarım konusunda birkaç farklı alternatif sundu. Hepsini yapıp geçmek yerine hangisinin neden daha mantıklı olduğunu anlattı.",
+  "Bizim ekip teknik değil, o yüzden teknik kararları bize yıkmaması önemliydi. Gereken yerlerde seçenekleri kendisi daralttı.",
+  "Teslim tarihine çok yakın bir değişiklik yaptık. Beklediğimden daha az sorun çıktı.",
+  "Siteyi teslim aldıktan sonra içerik güncellemek için tekrar tekrar geliştiriciye ihtiyaç duymuyoruz. Asıl işimize yarayan tarafı bu oldu.",
+  "İlk görüşmede anlattığımız şeyle ortaya çıkan ürün arasında bayağı fark var ama iyi anlamda. İhtiyacı daha doğru yorumladı.",
+  "En sevdiğim tarafı her şeye ‘olur’ dememesi. Bazı istediğimiz şeylerin kullanıcı açısından kötü olacağını direkt söyledi.",
+  "Proje boyunca iletişim kısa ve netti. Gereksiz toplantılar veya saatlerce süren mesajlaşmalar olmadı.",
+  "Teslimden sonra fark ettiğimiz birkaç edge case vardı. Bunları da çözüp kapattı, sonrasında tekrar aynı sorunları yaşamadık.",
+  "Daha önce hazır template üzerinden ilerlemiştik. Bu projede markaya özel bir şey yaptığımız hissi çok daha belirgin.",
+  "Sonuç beklediğimizden iyi oldu demek biraz klişe kalıyor ama özellikle performans ve mobil kullanım tarafında farkı gerçekten hissediyoruz.",
+] as const;
+
+const signalColumns = [clientSignals.slice(0, 7), clientSignals.slice(7, 14), clientSignals.slice(14, 20)] as const;
+
 function EcosystemCounter() {
   const [count, setCount] = useState(0);
   const countMotion = useMotionValue(0);
@@ -388,9 +413,65 @@ function ProjectCard({
   );
 }
 
+function ClientSignalColumn({
+  column,
+  index,
+}: {
+  column: readonly string[];
+  index: number;
+}) {
+  const reduceMotion = useReducedMotion();
+  const motionRange = index === 1 ? [0, 28, 0] : index === 2 ? [0, -22, 0] : [0, -34, 0];
+  const duration = [15, 19, 17][index];
+
+  return (
+    <motion.div
+      className={`signal-column signal-column--${index + 1}`}
+      animate={reduceMotion ? { y: 0 } : { y: motionRange }}
+      transition={reduceMotion ? { duration: 0 } : { duration, ease: "easeInOut", repeat: Infinity }}
+    >
+      {column.map((quote, quoteIndex) => (
+        <motion.article
+          className="signal-card"
+          key={quote}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.12 }}
+          transition={{ duration: 0.28, delay: quoteIndex * 0.035, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <span className="signal-card__index">SIGNAL / {index + 1}.{String(quoteIndex + 1).padStart(2, "0")}</span>
+          <blockquote>“{quote}”</blockquote>
+          <span className="signal-card__source">SOURCE / CLIENT NOTE</span>
+        </motion.article>
+      ))}
+    </motion.div>
+  );
+}
+
+function ClientSignals() {
+  return (
+    <section className="signals-section" aria-labelledby="client-signals-title">
+      <div className="signals-register" aria-hidden="true"><span>05 / CLIENT SIGNALS</span><span>FIELD NOTES / SOURCE-PROVIDED</span><span>GRID 03</span></div>
+      <div className="signals-heading">
+        <div>
+          <p className="eyebrow">05 / WORKING RECORD</p>
+          <h2 id="client-signals-title">Client signals</h2>
+        </div>
+        <p>Observed notes from completed engagements. Each column moves on its own cadence.</p>
+      </div>
+      <div className="signals-grid">
+        {signalColumns.map((column, index) => <ClientSignalColumn key={index} column={column} index={index} />)}
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("en");
   const text = copy[locale];
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const gridShift = useTransform(scrollYProgress, [0, 1], [0, -88]);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -399,7 +480,8 @@ export default function Home() {
 
   return (
     <main className="blueprint-shell">
-      <div className="drafting-grid" aria-hidden="true" />
+      <motion.div className="scroll-trace" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
+      <motion.div className="drafting-grid" style={{ y: reduceMotion ? 0 : gridShift }} aria-hidden="true" />
       <header className="site-header" aria-label="Hermes Software">
         <a href="#top" className="brand-lockup" aria-label="Hermes Software, page top">
           <img src="/manus-storage/hermes-mark_56a06bf6.png" alt="" className="brand-mark" />
@@ -526,7 +608,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="output" className="output-section blueprint-cell">
+      <ClientSignals />
+
+      <motion.section
+        id="output"
+        className="output-section blueprint-cell"
+        initial={reduceMotion ? false : { opacity: 0, y: 26 }}
+        whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.16 }}
+        transition={{ duration: 0.36, ease: [0.23, 1, 0.32, 1] }}
+      >
         <div className="cell-ruler" aria-hidden="true"><span>05</span><span>OUT</span></div>
         <div className="output-copy">
           <p className="eyebrow">{text.outputKicker}</p>
@@ -545,7 +636,7 @@ export default function Home() {
           <span>+90 544 257 77 60</span>
         </div>
         <img src="/manus-storage/hermes-output-signal_d7a6e208.png" alt="" className="output-art" />
-      </section>
+      </motion.section>
 
       <footer className="site-footer">
         <span>HERMES SOFTWARE © {new Date().getFullYear()}</span>
