@@ -445,11 +445,6 @@ export default function Home() {
             alt=""
             className="hero-blueprint-art"
           />
-          <img
-            src="/manus-storage/hermes-botanical-c_0dd918e6.png"
-            alt=""
-            className="botanical botanical--core"
-          />
         </motion.article>
 
         <motion.article
@@ -474,7 +469,6 @@ export default function Home() {
           </div>
           <blockquote>{text.manifesto}</blockquote>
           <p className="terminal-footnote">// {text.terminalFootnote}</p>
-          <img src="/manus-storage/hermes-botanical-a_90095e0b.png" alt="" className="botanical botanical--terminal" />
         </motion.article>
 
         <motion.article
@@ -503,11 +497,6 @@ export default function Home() {
             <strong>03. SHIPPED INTERFACE</strong>
             <i>COORD. X-207 / Y-048</i>
           </div>
-          <img
-            src="/manus-storage/hermes-user-hero_4abf58c0.png"
-            alt="Illustrated creative team building a software interface"
-            className="user-hero-art"
-          />
           <div className="visual-cell__caption"><Braces size={16} aria-hidden="true" /> <span>SOFTWARE / HUMAN / SYSTEM</span></div>
         </article>
       </section>
@@ -556,7 +545,6 @@ export default function Home() {
           <span>+90 544 257 77 60</span>
         </div>
         <img src="/manus-storage/hermes-output-signal_d7a6e208.png" alt="" className="output-art" />
-        <img src="/manus-storage/hermes-botanical-b_6f884086.png" alt="" className="botanical botanical--output" />
       </section>
 
       <footer className="site-footer">
