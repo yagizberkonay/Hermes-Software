@@ -4,6 +4,9 @@
  * and conspicuous negative space are non-negotiable in this page.
  */
 import { animate, motion, useMotionValue, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -16,6 +19,9 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { clientSignalsByLocale, signalLabels } from "@/lib/clientSignals";
+import { useSmoothDrafting } from "@/hooks/useSmoothDrafting";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type Locale = "en" | "tr" | "it" | "de" | "fr" | "nl" | "ru";
 
@@ -360,6 +366,7 @@ function ProjectCard({
   return (
     <motion.a
       className={`project-card project-card--${project.tint} project-card--${position + 1}`}
+      data-route={`ROUTE / ${project.number}A`}
       href={project.url}
       target="_blank"
       rel="noreferrer"
@@ -410,7 +417,7 @@ function ClientSignalColumn({
     >
       {column.map((quote, quoteIndex) => (
         <motion.article
-          className={`signal-card ${quoteIndex === 0 ? "signal-card--lead" : ""}`}
+          className={`signal-card ${quoteIndex === 0 ? "signal-card--lead" : ""} ${quoteIndex === column.length - 1 ? "signal-card--edge" : ""}`}
           key={quote}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -418,6 +425,7 @@ function ClientSignalColumn({
           transition={{ duration: 0.28, delay: quoteIndex * 0.035, ease: [0.23, 1, 0.32, 1] }}
         >
           <span className="signal-card__index">SIGNAL / {index + 1}.{String(quoteIndex + 1).padStart(2, "0")}</span>
+          <span className="signal-card__route" aria-hidden="true">FIELD / {String(index + 1).padStart(2, "0")}-{String(quoteIndex + 1).padStart(2, "0")} · VERIFIED</span>
           <blockquote>“{quote}”</blockquote>
           <span className="signal-card__source">{sourceLabel}</span>
         </motion.article>
@@ -451,9 +459,113 @@ function ClientSignals({ locale }: { locale: Locale }) {
 export default function Home() {
   const [locale, setLocale] = useState<Locale>("en");
   const text = copy[locale];
-  const reduceMotion = useReducedMotion();
+  const { rootRef, reduceMotion } = useSmoothDrafting();
   const { scrollYProgress } = useScroll();
   const gridShift = useTransform(scrollYProgress, [0, 1], [0, -88]);
+
+  useGSAP(
+    () => {
+      if (reduceMotion) return;
+
+      const sectionRegistries = gsap.utils.toArray<HTMLElement>(
+        ".archive-register, .signals-register, .output-addresses",
+      );
+      sectionRegistries.forEach((registry) => {
+        gsap.fromTo(
+          registry,
+          { autoAlpha: 0, scaleX: 0.72, transformOrigin: "left center" },
+          {
+            autoAlpha: 1,
+            scaleX: 1,
+            duration: 0.64,
+            ease: "power3.out",
+            scrollTrigger: { trigger: registry, start: "top 88%", once: true },
+          },
+        );
+      });
+
+      gsap.fromTo(
+        ".terminal-logs p",
+        { autoAlpha: 0, x: -16 },
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: "power3.out",
+          scrollTrigger: { trigger: ".terminal-cell", start: "top 78%", once: true },
+        },
+      );
+
+      gsap.fromTo(
+        ".scale-bars span",
+        { scaleY: 0, transformOrigin: "center bottom" },
+        {
+          scaleY: 1,
+          duration: 0.56,
+          stagger: 0.07,
+          ease: "back.out(1.7)",
+          scrollTrigger: { trigger: ".scale-cell", start: "top 82%", once: true },
+        },
+      );
+
+      gsap.fromTo(
+        ".visual-cell__plan strong",
+        { autoAlpha: 0, x: -22 },
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: 0.42,
+          stagger: 0.09,
+          ease: "power3.out",
+          scrollTrigger: { trigger: ".visual-cell", start: "top 84%", once: true },
+        },
+      );
+
+      gsap.fromTo(
+        ".project-schematic__node",
+        { scale: 0.45, autoAlpha: 0 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          duration: 0.5,
+          stagger: 0.12,
+          ease: "back.out(2)",
+          scrollTrigger: { trigger: ".project-schematic", start: "top 86%", once: true },
+        },
+      );
+
+      const desktopMotion = gsap.matchMedia();
+      desktopMotion.add("(min-width: 721px)", () => {
+        gsap.to(".project-schematic", {
+          yPercent: -12,
+          rotate: -1.5,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".projects-section",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.1,
+          },
+        });
+
+        gsap.to(".output-art", {
+          xPercent: 8,
+          rotate: -4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".output-section",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      });
+
+      return () => desktopMotion.revert();
+    },
+    { scope: rootRef, dependencies: [reduceMotion], revertOnUpdate: true },
+  );
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -461,7 +573,7 @@ export default function Home() {
   }, [locale]);
 
   return (
-    <main className="blueprint-shell">
+    <main className="blueprint-shell" ref={rootRef}>
       <motion.div className="scroll-trace" style={{ scaleX: scrollYProgress }} aria-hidden="true" />
       <motion.div className="drafting-grid" style={{ y: reduceMotion ? 0 : gridShift }} aria-hidden="true" />
       <header className="site-header" aria-label="Hermes Software">
@@ -504,7 +616,9 @@ export default function Home() {
             <span>{text.openBlueprint}</span>
             <ArrowDownRight size={18} aria-hidden="true" />
           </a>
-          <div className="hero-blueprint-art" aria-hidden="true"><span className="hero-blueprint-art__window" /><span className="hero-blueprint-art__module" /><span className="hero-blueprint-art__wire" /></div>
+          <div className="hero-parallax" aria-hidden="true">
+            <div className="hero-blueprint-art"><span className="hero-blueprint-art__window" /><span className="hero-blueprint-art__module" /><span className="hero-blueprint-art__wire" /></div>
+          </div>
         </motion.article>
 
         <motion.article

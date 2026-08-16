@@ -83,3 +83,7 @@ Marka işareti, Hermes’in hız/gönderi çağrışımını doğrudan figürle�
 - **Görselsiz yüzey kararı:** Kullanıcı talebi doğrultusunda hero dâhil hiçbir görüntü dosyası kullanılmayacaktır. Blueprint karakteri, yalnızca tipografi, CSS tabanlı rota çizgileri, düğüm noktaları, ölçüm ızgaraları ve geometrik modüllerle kurulacaktır.
 - **Marka işareti kuralı:** Hermes markası; siyah yüzey üzerindeki negatif alan `H`, kesişen rota çağrışımı ve sarı yön noktasıyla oluşturulacak; düz harf monogramına indirgenmeyecektir.
 - **Kayıt hiyerarşisi kuralı:** Uzun müşteri geri bildirimleri eşit ağırlıklı kart duvarı olarak değil; kolon etiketleri, öne çıkan kayıtlar ve varyasyonlu teknik işaretlerle düzenlenmiş alan notları olarak sunulacaktır.
+
+- **Sinyal kullanım kuralı:** Signal Yellow `#F5C518` yalnızca seçili durum, aktif rota düğümü, yön noktası veya sistem statüsünü anlatır; hücre köşelerinde ya da kart çerçevelerinde dekoratif tekrara dönüşmez.
+- **Hareket kuralı:** Yumuşak kaydırma, ScrollTrigger ve damping; içeriği sahnelemek için düşük genlikte çalışır. Hareket, teknik çizim katmanlarının momentumunu ve kayıt sırasını açıklar; okunabilirlikten bağımsız bir efekt üretmez.
+- **Görsel kısıt notu:** Botanik/illüstrasyon katmanı, kullanıcının tüm görüntü dosyalarını kaldırma talebi nedeniyle bu sürümde kullanılmayacaktır.

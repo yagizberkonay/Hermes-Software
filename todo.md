@@ -1,5 +1,14 @@
 # Hermes Software — Görsel Revizyonu
 
+## Hareket sistemi revizyonu
+
+- [x] Mevcut Framer Motion, scroll ve reduced-motion davranışını denetle.
+- [x] GSAP ile ScrollTrigger bağımlılığını ve animasyon kayıtlarını ekle.
+- [x] Yumuşak kaydırma ile Lerp/Damping tabanlı fare-parallax katmanını uygula.
+- [x] Blueprint bölümlerine scroll odaklı giriş, çizim ve pin koreografileri ekle.
+- [x] Masaüstü/mobil performansını, klavye erişimini ve reduced-motion tercihini doğrula.
+- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+
 ## Görselsiz Blueprint ve çok dilli geri bildirim revizyonu
 
 - [x] Hero, proje ve iletişim alanlarındaki tüm görsel varlık kullanımlarını tespit et.
