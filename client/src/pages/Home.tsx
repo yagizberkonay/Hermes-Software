@@ -61,7 +61,7 @@ type Copy = {
   github: string;
   email: string;
   systemReady: string;
-  projectDescriptions: [string, string, string, string];
+  projectDescriptions: [string, string, string, string, string, string];
 };
 
 const copy: Record<Locale, Copy> = {
@@ -82,7 +82,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "A counter used as a declaration of direction, not telemetry.",
     projectsKicker: "04 / SELECTED SYSTEMS",
     projectsTitle: "Blueprint archive",
-    projectIntro: "Four systems, each shaped around a different operational question.",
+    projectIntro: "Six systems, each shaped around a different operational question.",
     outputKicker: "05 / OUTPUT CHANNEL",
     outputTitle: "Build a signal.",
     outputIntro: "For architecture, experimentation, or the next difficult interface — send a line.",
@@ -96,6 +96,8 @@ const copy: Record<Locale, Copy> = {
       "AI Data Compression",
       "Virtual Try-On Engine",
       "Algorithmic Experimentation",
+      "Developer Boilerplate",
+      "Personal AI Agent",
     ],
   },
   tr: {
@@ -115,7 +117,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "Telemetri değil, yönü tanımlayan bir sayaç.",
     projectsKicker: "04 / SEÇİLMİŞ SİSTEMLER",
     projectsTitle: "Plan arşivi",
-    projectIntro: "Her biri farklı bir operasyonel soruya göre şekillenen dört sistem.",
+    projectIntro: "Her biri farklı bir operasyonel soruya göre şekillenen altı sistem.",
     outputKicker: "05 / ÇIKIŞ KANALI",
     outputTitle: "Bir sinyal kurun.",
     outputIntro: "Mimari, deney veya bir sonraki zor arayüz için bir satır bırakın.",
@@ -129,6 +131,8 @@ const copy: Record<Locale, Copy> = {
       "Yapay Zekâ Veri Sıkıştırma",
       "Sanal Deneme Motoru",
       "Algoritmik Deneyler",
+      "Geliştirici Başlangıç Mimarisi",
+      "Kişisel Yapay Zekâ Asistanı",
     ],
   },
   it: {
@@ -148,7 +152,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "Un contatore di direzione, non telemetria.",
     projectsKicker: "04 / SISTEMI SELEZIONATI",
     projectsTitle: "Archivio blueprint",
-    projectIntro: "Quattro sistemi, ciascuno modellato attorno a una domanda operativa.",
+    projectIntro: "Sei sistemi, ciascuno modellato attorno a una domanda operativa.",
     outputKicker: "05 / CANALE DI USCITA",
     outputTitle: "Costruiamo un segnale.",
     outputIntro: "Per architettura, sperimentazione o la prossima interfaccia difficile — scrivi una riga.",
@@ -162,6 +166,8 @@ const copy: Record<Locale, Copy> = {
       "Compressione dati AI",
       "Motore virtual try-on",
       "Sperimentazione algoritmica",
+      "Boilerplate per sviluppatori",
+      "Agente AI personale",
     ],
   },
   de: {
@@ -181,7 +187,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "Ein Zähler als Richtungsansage, nicht als Telemetrie.",
     projectsKicker: "04 / AUSGEWÄHLTE SYSTEME",
     projectsTitle: "Blueprint-Archiv",
-    projectIntro: "Vier Systeme, geformt um jeweils eine andere operative Frage.",
+    projectIntro: "Sechs Systeme, geformt um jeweils eine andere operative Frage.",
     outputKicker: "05 / AUSGABE-KANAL",
     outputTitle: "Ein Signal bauen.",
     outputIntro: "Für Architektur, Experimente oder das nächste schwierige Interface — schreib eine Zeile.",
@@ -195,6 +201,8 @@ const copy: Record<Locale, Copy> = {
       "KI-Datenkompression",
       "Virtuelle Anprobe-Engine",
       "Algorithmische Experimente",
+      "Boilerplate für Entwickler",
+      "Persönlicher KI-Agent",
     ],
   },
   fr: {
@@ -214,7 +222,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "Un compteur de direction, pas de télémétrie.",
     projectsKicker: "04 / SYSTÈMES SÉLECTIONNÉS",
     projectsTitle: "Archive blueprint",
-    projectIntro: "Quatre systèmes, chacun façonné autour d'une question opérationnelle.",
+    projectIntro: "Six systèmes, chacun façonné autour d'une question opérationnelle.",
     outputKicker: "05 / CANAL DE SORTIE",
     outputTitle: "Construisons un signal.",
     outputIntro: "Pour l'architecture, l'expérimentation ou la prochaine interface difficile — laissez un mot.",
@@ -228,6 +236,8 @@ const copy: Record<Locale, Copy> = {
       "Compression de données IA",
       "Moteur d'essayage virtuel",
       "Expérimentation algorithmique",
+      "Boilerplate développeur",
+      "Agent IA personnel",
     ],
   },
   nl: {
@@ -247,7 +257,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "Een teller als richtingsverklaring, geen telemetrie.",
     projectsKicker: "04 / GESELECTEERDE SYSTEMEN",
     projectsTitle: "Blueprint-archief",
-    projectIntro: "Vier systemen, elk gevormd rond een andere operationele vraag.",
+    projectIntro: "Zes systemen, elk gevormd rond een andere operationele vraag.",
     outputKicker: "05 / UITVOERKANAAL",
     outputTitle: "Bouw een signaal.",
     outputIntro: "Voor architectuur, experimentatie of de volgende lastige interface — stuur een regel.",
@@ -261,6 +271,8 @@ const copy: Record<Locale, Copy> = {
       "AI-datacompressie",
       "Virtuele pas-engine",
       "Algoritmische experimenten",
+      "Boilerplate voor ontwikkelaars",
+      "Persoonlijke AI-agent",
     ],
   },
   ru: {
@@ -280,7 +292,7 @@ const copy: Record<Locale, Copy> = {
     scaleFootnote: "Счётчик направления, а не телеметрия.",
     projectsKicker: "04 / ИЗБРАННЫЕ СИСТЕМЫ",
     projectsTitle: "Архив схем",
-    projectIntro: "Четыре системы, каждая построена вокруг своего операционного вопроса.",
+    projectIntro: "Шесть систем, каждая построена вокруг своего операционного вопроса.",
     outputKicker: "05 / КАНАЛ ВЫВОДА",
     outputTitle: "Создадим сигнал.",
     outputIntro: "Для архитектуры, эксперимента или следующего сложного интерфейса — напишите строку.",
@@ -294,6 +306,8 @@ const copy: Record<Locale, Copy> = {
       "ИИ-сжатие данных",
       "Движок виртуальной примерки",
       "Алгоритмические эксперименты",
+      "Шаблон для разработчиков",
+      "Персональный ИИ-агент",
     ],
   },
 };
@@ -326,6 +340,20 @@ const projects = [
     url: "https://github.com/yagizberkonay/AIE-Lab",
     tags: ["Tauri 2", "React", "Rust", "SQLite"],
     tint: "pink",
+  },
+  {
+    number: "05",
+    name: "NEXO",
+    url: "https://github.com/yagizberkonay/NEXO",
+    tags: ["Next.js", "TypeScript", "Supabase", "Developer Boilerplate"],
+    tint: "yellow",
+  },
+  {
+    number: "06",
+    name: "NYX",
+    url: "https://github.com/yagizberkonay/NYX",
+    tags: ["Personal AI Agent"],
+    tint: "blue",
   },
 ] as const;
 
@@ -406,8 +434,9 @@ function ClientSignalColumn({
   sourceLabel: string;
 }) {
   const reduceMotion = useReducedMotion();
-  const motionRange = index === 1 ? [0, 28, 0] : index === 2 ? [0, -22, 0] : [0, -34, 0];
-  const duration = [12, 16, 14][index];
+  const repeatedColumn = [...column, ...column];
+  const motionRange = index === 1 ? ["-50%", "0%"] : ["0%", "-50%"];
+  const duration = [8, 10, 9][index];
 
   return (
     <motion.div
@@ -415,10 +444,10 @@ function ClientSignalColumn({
       animate={reduceMotion ? { y: 0 } : { y: motionRange }}
       transition={reduceMotion ? { duration: 0 } : { duration, ease: "easeInOut", repeat: Infinity }}
     >
-      {column.map((quote, quoteIndex) => (
+          {repeatedColumn.map((quote, quoteIndex) => (
         <motion.article
           className={`signal-card ${quoteIndex === 0 ? "signal-card--lead" : ""} ${quoteIndex === column.length - 1 ? "signal-card--edge" : ""}`}
-          key={quote}
+          key={`${quote}-${quoteIndex}`}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
@@ -522,33 +551,8 @@ export default function Home() {
         },
       );
 
-      gsap.fromTo(
-        ".project-schematic__node",
-        { scale: 0.45, autoAlpha: 0 },
-        {
-          scale: 1,
-          autoAlpha: 1,
-          duration: 0.5,
-          stagger: 0.12,
-          ease: "back.out(2)",
-          scrollTrigger: { trigger: ".project-schematic", start: "top 86%", once: true },
-        },
-      );
-
       const desktopMotion = gsap.matchMedia();
       desktopMotion.add("(min-width: 721px)", () => {
-        gsap.to(".project-schematic", {
-          yPercent: -12,
-          rotate: -1.5,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".projects-section",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1.1,
-          },
-        });
-
         gsap.to(".output-art", {
           xPercent: 8,
           rotate: -4,
@@ -616,9 +620,6 @@ export default function Home() {
             <span>{text.openBlueprint}</span>
             <ArrowDownRight size={18} aria-hidden="true" />
           </a>
-          <div className="hero-parallax" aria-hidden="true">
-            <div className="hero-blueprint-art"><span className="hero-blueprint-art__window" /><span className="hero-blueprint-art__module" /><span className="hero-blueprint-art__wire" /></div>
-          </div>
         </motion.article>
 
         <motion.article
@@ -694,9 +695,6 @@ export default function Home() {
               position={index}
             />
           ))}
-          <div className="project-schematic" aria-hidden="true">
-            <span className="project-schematic__label">ARCHIVE / NODE MAP</span><span className="project-schematic__node project-schematic__node--a" /><span className="project-schematic__node project-schematic__node--b" /><span className="project-schematic__node project-schematic__node--c" />
-          </div>
         </div>
       </section>
 

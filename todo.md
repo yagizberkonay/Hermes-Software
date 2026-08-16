@@ -1,5 +1,15 @@
 # Hermes Software — Görsel Revizyonu
 
+## Sadeleştirme, arşiv ve sinyal akışı revizyonu
+
+- [x] Hero ve arşivdeki gereksiz dekoratif teknik şekilleri tespit et.
+- [x] Hero ve arşiv yüzeylerini daha sade Blueprint düzenine indir.
+- [x] NEXO ile NYX depolarının teknoloji bilgilerini doğrula ve proje modüllerini ekle.
+- [x] Proje gridini altı kartlık dengeli arşiv düzenine getir.
+- [x] Client signals bölümündeki kayıt miktarını azaltıp akış hızını yükselt.
+- [x] Masaüstü/mobil görünüm ve production build doğrulamasını tamamla.
+- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+
 ## Hareket sistemi revizyonu
 
 - [x] Mevcut Framer Motion, scroll ve reduced-motion davranışını denetle.
