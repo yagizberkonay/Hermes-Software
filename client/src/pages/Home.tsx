@@ -408,6 +408,7 @@ function ProjectCard({
         <span>{project.number} / SYSTEM</span>
         <ArrowUpRight size={20} strokeWidth={2.5} aria-hidden="true" />
       </span>
+      <span className="project-card__coordinates" aria-hidden="true">ORIGIN / HERMES&nbsp;&nbsp;→&nbsp;&nbsp;NODE / {project.number}A</span>
       <span className="project-card__name">{project.name}</span>
       <span className="project-card__description">{description}</span>
       <span className="project-card__bottomline">
@@ -434,32 +435,39 @@ function ClientSignalColumn({
   sourceLabel: string;
 }) {
   const reduceMotion = useReducedMotion();
-  const repeatedColumn = [...column, ...column];
-  const motionRange = index === 1 ? ["-50%", "0%"] : ["0%", "-50%"];
-  const duration = [8, 10, 9][index];
+  const repeatedColumn = [...column, ...column, ...column];
+  const motionRange = index === 1 ? ["-33.333333%", "0%"] : ["0%", "-33.333333%"];
+  const duration = [7.2, 8.6, 7.8][index];
 
   return (
-    <motion.div
-      className={`signal-column signal-column--${index + 1}`}
-      animate={reduceMotion ? { y: 0 } : { y: motionRange }}
-      transition={reduceMotion ? { duration: 0 } : { duration, ease: "easeInOut", repeat: Infinity }}
-    >
-          {repeatedColumn.map((quote, quoteIndex) => (
-        <motion.article
-          className={`signal-card ${quoteIndex === 0 ? "signal-card--lead" : ""} ${quoteIndex === column.length - 1 ? "signal-card--edge" : ""}`}
-          key={`${quote}-${quoteIndex}`}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.12 }}
-          transition={{ duration: 0.28, delay: quoteIndex * 0.035, ease: [0.23, 1, 0.32, 1] }}
-        >
-          <span className="signal-card__index">SIGNAL / {index + 1}.{String(quoteIndex + 1).padStart(2, "0")}</span>
-          <span className="signal-card__route" aria-hidden="true">FIELD / {String(index + 1).padStart(2, "0")}-{String(quoteIndex + 1).padStart(2, "0")} · VERIFIED</span>
-          <blockquote>“{quote}”</blockquote>
-          <span className="signal-card__source">{sourceLabel}</span>
-        </motion.article>
-      ))}
-    </motion.div>
+    <div className={`signal-column signal-column--${index + 1}`}>
+      <motion.div
+        className="signal-loop"
+        animate={reduceMotion ? { y: 0 } : { y: motionRange }}
+        transition={reduceMotion ? { duration: 0 } : { duration, ease: "linear", repeat: Infinity }}
+      >
+        {repeatedColumn.map((quote, quoteIndex) => {
+          const copyIndex = Math.floor(quoteIndex / column.length);
+          const itemIndex = quoteIndex % column.length;
+          return (
+            <motion.article
+              className={`signal-card ${itemIndex === 0 ? "signal-card--lead" : ""} ${itemIndex === column.length - 1 ? "signal-card--edge" : ""}`}
+              key={`${quote}-${quoteIndex}`}
+              aria-hidden={copyIndex > 0}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.12 }}
+              transition={{ duration: 0.28, delay: itemIndex * 0.035, ease: [0.23, 1, 0.32, 1] }}
+            >
+              <span className="signal-card__index">SIGNAL / {index + 1}.{String(itemIndex + 1).padStart(2, "0")}</span>
+              <span className="signal-card__route" aria-hidden="true">FIELD / {String(index + 1).padStart(2, "0")}-{String(itemIndex + 1).padStart(2, "0")} · VERIFIED</span>
+              <blockquote>“{quote}”</blockquote>
+              <span className="signal-card__source">{sourceLabel}</span>
+            </motion.article>
+          );
+        })}
+      </motion.div>
+    </div>
   );
 }
 
@@ -477,6 +485,11 @@ function ClientSignals({ locale }: { locale: Locale }) {
           <h2 id="client-signals-title">{labels.title}</h2>
         </div>
         <p>{labels.intro}</p>
+      </div>
+      <div className="signals-route" aria-hidden="true">
+        <span>ORIGIN / CLIENT FIELD</span>
+        <span>ROUTE / 05 · RECORDS / 20</span>
+        <span>DEST / BLUEPRINT ARCHIVE</span>
       </div>
       <div className="signals-grid">
         {signalColumns.map((column, index) => <ClientSignalColumn key={index} column={column} index={index} sourceLabel={labels.source} />)}
@@ -519,8 +532,8 @@ export default function Home() {
         {
           autoAlpha: 1,
           x: 0,
-          duration: 0.4,
-          stagger: 0.08,
+          duration: 0.34,
+          stagger: { each: 0.055, from: "start" },
           ease: "power3.out",
           scrollTrigger: { trigger: ".terminal-cell", start: "top 78%", once: true },
         },
@@ -636,10 +649,17 @@ export default function Home() {
               <h2>{text.terminalTitle}</h2>
             </div>
           </div>
-          <div className="terminal-logs" aria-label="System status">
-            <p><span>&gt;</span> Tauri v2 initialized <b>OK</b></p>
-            <p><span>&gt;</span> Next.js runtime active <b>OK</b></p>
-            <p><span>&gt;</span> Gemini 2.5-flash API handshake <b>OK</b></p>
+          <div className="terminal-logs" aria-label="Senior technology stack status">
+            <p className="terminal-log__command"><span>$</span> stack --probe --senior <em>RUNNING</em></p>
+            <p><span>&gt;</span> TypeScript / type-surface <b>OK</b></p>
+            <p><span>&gt;</span> Rust / systems-core <b>OK</b></p>
+            <p><span>&gt;</span> JavaScript / runtime-layer <b>OK</b></p>
+            <p><span>&gt;</span> Python / automation-layer <b>OK</b></p>
+            <p><span>&gt;</span> Next.js / application-runtime <b>OK</b></p>
+            <p><span>&gt;</span> Tailwind CSS / interface-system <b>OK</b></p>
+            <p><span>&gt;</span> Tauri / desktop-shell <b>OK</b></p>
+            <p><span>&gt;</span> Node.js / service-runtime <b>OK</b></p>
+            <p><span>&gt;</span> React / component-runtime <b>OK</b></p>
             <p><span>&gt;</span> hermes://workspace <em>READY_</em></p>
           </div>
           <blockquote>{text.manifesto}</blockquote>

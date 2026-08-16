@@ -1,5 +1,20 @@
 # Hermes Software — Görsel Revizyonu
 
+## Sınırsız akış ve senior terminal revizyonu
+
+- [x] Client signals akışını görünür sıçrama olmadan sürekli dönen marquee yapısına çevir.
+- [x] Terminal paneline TypeScript, Rust, JavaScript, Python, Next.js, Tailwind CSS, Tauri, Node.js, React durum satırlarını ekle.
+- [x] Terminalin görsel hiyerarşisini daha kıdemli bir sistem kontrol yüzeyine yükselt.
+- [x] Masaüstü/mobil görünüm ve production build doğrulamasını tamamla.
+- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+
+## Son Blueprint detay revizyonu
+
+- [x] Archive kartlarını eşit katalog ritminden çıkarıp farklı plaka ölçeklerine ayır.
+- [x] Client signals bölümüne origin/route/destination ölçüm satırını ekle.
+- [x] Signal Yellow kullanımını durum, yön ve seçili etkileşimlerle sınırla.
+- [x] Yeni masaüstü ve mobil screenshot doğrulamasını tamamla.
+
 ## Sadeleştirme, arşiv ve sinyal akışı revizyonu
 
 - [x] Hero ve arşivdeki gereksiz dekoratif teknik şekilleri tespit et.
@@ -8,7 +23,7 @@
 - [x] Proje gridini altı kartlık dengeli arşiv düzenine getir.
 - [x] Client signals bölümündeki kayıt miktarını azaltıp akış hızını yükselt.
 - [x] Masaüstü/mobil görünüm ve production build doğrulamasını tamamla.
-- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+- [x] Yeni checkpoint oluştur ve kullanıcıya ilet.
 
 ## Hareket sistemi revizyonu
 
@@ -17,7 +32,7 @@
 - [x] Yumuşak kaydırma ile Lerp/Damping tabanlı fare-parallax katmanını uygula.
 - [x] Blueprint bölümlerine scroll odaklı giriş, çizim ve pin koreografileri ekle.
 - [x] Masaüstü/mobil performansını, klavye erişimini ve reduced-motion tercihini doğrula.
-- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+- [x] Yeni checkpoint oluştur ve kullanıcıya ilet.
 
 ## Görselsiz Blueprint ve çok dilli geri bildirim revizyonu
 
@@ -26,7 +41,7 @@
 - [x] Her desteklenen arayüz dili için özgün geri bildirim çevirilerini ekle.
 - [x] Asenkron yorum akışının hareket sürelerini ölçülü biçimde azalt.
 - [x] Masaüstü ve mobil görünüm ile production build doğrulamasını tamamla.
-- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+- [x] Yeni checkpoint oluştur ve kullanıcıya ilet.
 
 ## Geri bildirim ve hareket revizyonu
 
@@ -35,7 +50,7 @@
 - [x] Scroll ilerlemesine bağlı teknik çizim, başlık ve bölüm vurgularını ekle.
 - [x] Reduced-motion tercihi için hareketleri güvenli biçimde sadeleştir.
 - [x] Masaüstü ve mobil akışta görünüm ile üretim derlemesini doğrula.
-- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+- [x] Yeni checkpoint oluştur ve kullanıcıya ilet.
 
 - [x] Kullanıcı tarafından sağlanan ana illüstrasyon ve botanik varlıkların kullanım yerlerini tespit et.
 - [x] Kullanıcı görsellerini JSX ve stil dosyalarından kaldır.
@@ -52,4 +67,4 @@ Kullanıcı tarafından verilen ana illüstrasyon ile botanik görselleri kaldı
 - Üretim derlemesi: başarılı
 - Masaüstü screenshot: başarılı
 - Mobil screenshot: başarılı
-- Yeni checkpoint: bekleniyor
+- Yeni checkpoint: başarılı
