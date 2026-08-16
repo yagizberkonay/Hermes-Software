@@ -1,12 +1,22 @@
 # Hermes Software — Görsel Revizyonu
 
+## Kaydırma performansı optimizasyonu
+
+- [ ] Lenis, GSAP ScrollTrigger, Framer Motion ve pointer parallax döngülerindeki frame darboğazlarını incele.
+- [ ] Scroll sırasında layout/paint tetikleyen pahalı CSS ve DOM desenlerini azalt.
+- [ ] Marquee, grid parallax ve reveal animasyonlarını GPU-dostu ve düşük maliyetli hale getir.
+- [ ] Görünürlük tabanlı animasyonları ve reduced-motion davranışını yeniden doğrula.
+- [ ] Masaüstü ve mobil production build ile screenshot/performance kontrolünü tamamla.
+- [ ] Optimize edilmiş sürüm için yeni checkpoint oluştur.
+
+
 ## Sınırsız akış ve senior terminal revizyonu
 
 - [x] Client signals akışını görünür sıçrama olmadan sürekli dönen marquee yapısına çevir.
 - [x] Terminal paneline TypeScript, Rust, JavaScript, Python, Next.js, Tailwind CSS, Tauri, Node.js, React durum satırlarını ekle.
 - [x] Terminalin görsel hiyerarşisini daha kıdemli bir sistem kontrol yüzeyine yükselt.
 - [x] Masaüstü/mobil görünüm ve production build doğrulamasını tamamla.
-- [ ] Yeni checkpoint oluştur ve kullanıcıya ilet.
+- [x] Yeni checkpoint oluştur ve kullanıcıya ilet.
 
 ## Son Blueprint detay revizyonu
 
@@ -67,4 +77,4 @@ Kullanıcı tarafından verilen ana illüstrasyon ile botanik görselleri kaldı
 - Üretim derlemesi: başarılı
 - Masaüstü screenshot: başarılı
 - Mobil screenshot: başarılı
-- Yeni checkpoint: başarılı
+- Yeni checkpoint: cf92953c başarılı
