@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "@/App.css";
 import Lenis from "lenis";
 import { Toaster } from "sonner";
@@ -16,7 +15,6 @@ import Faq from "@/components/hermes/Faq";
 import Cta from "@/components/hermes/Cta";
 import Footer from "@/components/hermes/Footer";
 import ContactModal from "@/components/hermes/ContactModal";
-import Admin from "@/components/hermes/Admin";
 
 function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -68,12 +66,7 @@ function HomePage() {
 function App() {
   return (
     <LangProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </BrowserRouter>
+      <HomePage />
       <Toaster
         position="bottom-center"
         toastOptions={{

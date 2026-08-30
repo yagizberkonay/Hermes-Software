@@ -10,9 +10,9 @@ Design the digital identity + website for HERMES SOFTWARE INC.®, a software stu
 - Testimonials: clearly marked placeholders (real ones to be provided later)
 
 ## Architecture
-- Frontend: React (CRA/craco) + Tailwind + framer-motion + lenis smooth scroll
-- Backend: FastAPI + MongoDB (`inquiries` collection)
-- API: POST /api/inquiries, GET /api/inquiries
+- Frontend: React (CRA/craco) + Tailwind + framer-motion + Lenis smooth scroll
+- Publication target: standalone static frontend on Vercel (`frontend/vercel.json`, `yarn build`, `build/` output)
+- Contact flow: a client-side arithmetic challenge plus honeypot, followed by a pre-addressed email draft to `info@hermessoftware.space`; no API, database, or runtime environment variable is required.
 - Files: `frontend/src/components/hermes/*` (Nav, Hero, Ticker, About, Services, Testimonials, Pricing, Faq, Cta, Footer, ContactModal, primitives), `frontend/src/lib/i18n.js` (full EN/TR dict), `frontend/src/lib/pricing.js` (isolated pricing config — edit values without touching UI)
 
 ## Visual Identity
@@ -28,7 +28,7 @@ Design the digital identity + website for HERMES SOFTWARE INC.®, a software stu
 - Testimonial wall: 3 async auto-scroll columns (down/up/down, different speeds), PLACEHOLDER-tagged cards
 - Pricing estimator: type/complexity/add-on physical controls, animated rolling number, USD/EUR/TRY, estimate attaches to contact modal
 - FAQ: 5-question editorial accordion, numbers grow oversized on open, clip-path reveal
-- Final CTA (red, largest type moment), minimal footer, brutalist contact modal → MongoDB
+- Final CTA (red, largest type moment), minimal footer, brutalist contact modal
 - Full EN/TR i18n, prefers-reduced-motion respected, data-testids everywhere
 - Verified: curl (inquiries POST/GET), screenshots (desktop all sections, mobile hero + menu, estimator flow, modal submit, TR toggle)
 
@@ -43,17 +43,15 @@ This iteration (per user request: mock realistic reviews, lower prices, add all 
 - **Bug fixes:** hero/RevealLine mask reveals converted to reliable CSS keyframe (`.reveal-inner.is-in`) — headless browsers throttle framer JS animations, so critical text now uses CSS + `useInView` trigger; fixed mobile horizontal overflow (global `overflow-x: clip` + About parallax gated to ≥lg); ContactModal now closes on Escape + moves focus in; Turkish uppercase İ fixed by setting `document.documentElement.lang`.
 - **Backend hardening:** `InquiryCreate.email` is `EmailStr` + length limits; in-memory per-IP rate limit (10/5min, real IP via X-Forwarded-For); admin compare via `hmac.compare_digest`.
 
-## API (current)
-- POST /api/inquiries — public (rate-limited); creates inquiry + fires owner email (background)
-- GET /api/inquiries — requires `X-Admin-Password` header (401 otherwise); newest-first
-- POST /api/admin/verify — validates admin password header
-
-## Verified (July 2026)
-- Backend pytest suite `/app/backend/tests/backend_test.py`: 16/16 pass. Email 202 in logs. EmailStr 422 on bad email. Admin 401 without header.
-- Frontend: testing agent all core flows PASS; self-verified hero reveal, Work section, Admin login+list, Turkish İ casing, no horizontal overflow (scrollWidth==clientWidth), modal Escape closes.
+## Implemented — Update (August 30, 2026)
+- **Real work showcase:** Onyx (API client), Prompt Shrink (LLM gateway), and Moment (personal desktop context) replace mock projects. Each is paired with a designed editorial illustration and localized EN/TR copy.
+- **Pricing:** estimator bases are now $900 (website), $2,200 (web app), $3,000 (mobile), $3,600 (custom), and $1,600 (other), with lower add-ons and complexity multipliers.
+- **Footer:** restricted to only `mailto:info@hermessoftware.space` and `https://instagram.com/hermes.software`.
+- **Frontend-only Vercel publication:** removed the admin route, API client, preview tracking scripts, and all live API usage from the shipped app. The contact modal validates a lightweight local arithmetic challenge/honeypot then opens a populated email draft. Added Vercel SPA rewrite and production metadata.
+- **Verified:** `yarn eslint src --max-warnings=0` and `yarn build` succeed; live browser smoke check confirms the branded title, no horizontal overflow at desktop width, and the working client-only CAPTCHA/contact modal; Vercel readiness scan passed with no blockers.
 
 ## Backlog (remaining)
-- P1: Real social links / email in Footer.jsx (currently generic hrefs)
-- P1: Replace mock testimonials & mock case studies with real content when the user provides them
-- P2: Server-issued admin token instead of replaying the shared password; optional CAPTCHA on the public form
+- P1: Replace mock testimonials with verified client-approved quotes when provided.
+- P1: Review the wording and exact price positioning with the studio owner before launch.
+- P2: Add a dedicated form/email delivery service only if browser email-draft handoff is no longer sufficient; a true server-verified CAPTCHA also requires such a service.
 

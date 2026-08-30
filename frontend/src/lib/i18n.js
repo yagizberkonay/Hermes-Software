@@ -114,8 +114,7 @@ export const STR = {
       captchaError: "WRONG ANSWER. TRY THE NEW ONE.",
       submit: "SEND IT →",
       sending: "SENDING...",
-      success: "GOT IT. WE'LL BE IN TOUCH WITHIN 48 HOURS.",
-      error: "SOMETHING BROKE. TRY AGAIN.",
+      emailDraft: "YOUR EMAIL DRAFT IS READY TO SEND.",
     },
   },
   tr: {
@@ -231,8 +230,7 @@ export const STR = {
       captchaError: "YANLIŞ CEVAP. YENİ SORUYU DENE.",
       submit: "GÖNDER →",
       sending: "GÖNDERİLİYOR...",
-      success: "ALDIK. 48 SAAT İÇİNDE DÖNECEĞİZ.",
-      error: "BİR ŞEYLER TERS GİTTİ. TEKRAR DENE.",
+      emailDraft: "E-POSTA TASLAĞIN GÖNDERİME HAZIR.",
     },
   },
 };

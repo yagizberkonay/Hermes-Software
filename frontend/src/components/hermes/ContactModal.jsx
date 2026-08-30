@@ -1,30 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
 import { toast } from "sonner";
 import { useLang } from "@/lib/i18n";
 import { EASE, Star4 } from "./primitives";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const makeChallenge = () => {
+  const left = Math.floor(Math.random() * 8) + 2;
+  const right = Math.floor(Math.random() * 8) + 2;
+  return { question: `${left} + ${right}`, answer: String(left + right) };
+};
 
 export default function ContactModal({ open, onClose, estimate }) {
   const { t, lang } = useLang();
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "", website: "" });
   const [sending, setSending] = useState(false);
-  const [captcha, setCaptcha] = useState(null);
+  const [captcha, setCaptcha] = useState(makeChallenge);
   const [captchaAnswer, setCaptchaAnswer] = useState("");
   const closeRef = useRef(null);
 
-  const fetchCaptcha = async () => {
-    setCaptcha(null);
+  const refreshCaptcha = useCallback(() => {
+    setCaptcha(makeChallenge());
     setCaptchaAnswer("");
-    try {
-      const { data } = await axios.get(`${API}/captcha`);
-      setCaptcha(data);
-    } catch {
-      setCaptcha(null);
-    }
-  };
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -32,39 +29,35 @@ export default function ContactModal({ open, onClose, estimate }) {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKey);
-    // move focus into the dialog on open
     closeRef.current?.focus();
-    fetchCaptcha();
+    refreshCaptcha();
     return () => document.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, onClose]);
+  }, [open, onClose, refreshCaptcha]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const submit = async (e) => {
     e.preventDefault();
-    setSending(true);
-    try {
-      await axios.post(`${API}/inquiries`, {
-        ...form,
-        estimate: estimate || null,
-        lang,
-        captcha_id: captcha?.id,
-        captcha_answer: captchaAnswer,
-      });
-      toast.success(t.contact.success);
-      setForm({ name: "", email: "", project_type: "", message: "", website: "" });
-      onClose();
-    } catch (err) {
-      if (err?.response?.status === 400) {
-        toast.error(t.contact.captchaError);
-        fetchCaptcha();
-      } else {
-        toast.error(t.contact.error);
-      }
-    } finally {
-      setSending(false);
+    if (form.website || captchaAnswer.trim() !== captcha.answer) {
+      toast.error(t.contact.captchaError);
+      refreshCaptcha();
+      return;
     }
+
+    setSending(true);
+    const details = [
+      `${t.contact.name}: ${form.name}`,
+      `${t.contact.email}: ${form.email}`,
+      `${t.contact.type}: ${form.project_type || "—"}`,
+      estimate ? `${t.contact.estimateNote} ${estimate}` : null,
+      "",
+      form.message,
+    ].filter(Boolean).join("\n");
+
+    window.location.href = `mailto:info@hermessoftware.space?subject=${encodeURIComponent(`${t.contact.title}: ${form.name}`)}&body=${encodeURIComponent(details)}`;
+    toast.success(t.contact.emailDraft);
+    setSending(false);
+    onClose();
   };
 
   return (
@@ -112,7 +105,6 @@ export default function ContactModal({ open, onClose, estimate }) {
                   {t.contact.estimateNote} {estimate}
                 </p>
               )}
-              {/* Honeypot — hidden from real users, bots tend to fill every field */}
               <input
                 type="text"
                 name="website"
@@ -125,15 +117,15 @@ export default function ContactModal({ open, onClose, estimate }) {
                 data-testid="contact-honeypot"
               />
               <div>
-                <label className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-name">{t.contact.name}</label>
+                <label data-testid="contact-label-name" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-name">{t.contact.name}</label>
                 <input id="c-name" data-testid="contact-input-name" className="input-brutal" required value={form.name} onChange={set("name")} placeholder="ADA LOVELACE" />
               </div>
               <div>
-                <label className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-email">{t.contact.email}</label>
+                <label data-testid="contact-label-email" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-email">{t.contact.email}</label>
                 <input id="c-email" data-testid="contact-input-email" className="input-brutal" type="email" required value={form.email} onChange={set("email")} placeholder="ADA@EXAMPLE.COM" />
               </div>
               <div>
-                <label className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-type">{t.contact.type}</label>
+                <label data-testid="contact-label-type" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-type">{t.contact.type}</label>
                 <select id="c-type" data-testid="contact-select-type" className="input-brutal" value={form.project_type} onChange={set("project_type")}>
                   <option value="">—</option>
                   {t.contact.typeOptions.map((o) => (
@@ -142,17 +134,17 @@ export default function ContactModal({ open, onClose, estimate }) {
                 </select>
               </div>
               <div>
-                <label className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-msg">{t.contact.message}</label>
+                <label data-testid="contact-label-message" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-msg">{t.contact.message}</label>
                 <textarea id="c-msg" data-testid="contact-input-message" className="input-brutal min-h-[110px]" required value={form.message} onChange={set("message")} placeholder="..." />
               </div>
               <div>
-                <label className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-captcha">{t.contact.captchaLabel}</label>
+                <label data-testid="contact-label-captcha" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-captcha">{t.contact.captchaLabel}</label>
                 <div className="flex items-stretch gap-2">
                   <span
                     className="input-brutal flex items-center justify-center font-display text-lg min-w-[110px] bg-[#FFE45C] select-none"
                     data-testid="contact-captcha-question"
                   >
-                    {captcha ? `${captcha.question} =` : t.contact.captchaLoading}
+                    {`${captcha.question} =`}
                   </span>
                   <input
                     id="c-captcha"
@@ -167,7 +159,7 @@ export default function ContactModal({ open, onClose, estimate }) {
                   <button
                     type="button"
                     data-testid="contact-captcha-refresh"
-                    onClick={fetchCaptcha}
+                    onClick={refreshCaptcha}
                     aria-label={t.contact.captchaRefresh}
                     className="btn-press border-[3px] border-[#111] px-3 font-display text-lg hover:rotate-180 transition-transform duration-300"
                   >
