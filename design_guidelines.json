@@ -1,0 +1,158 @@
+{
+  "project_name": "HERMES SOFTWARE INC.®",
+  "theme_strategy": "Light Theme Default (Off-White Background) with High-Contrast Pop Art/Neo-Brutalist Elements",
+  "typography": {
+    "display_font": {
+      "family": "'Bebas Neue', 'Anton', sans-serif",
+      "usage": "Graphic objects, oversized single words, main headings, numbers",
+      "style": "Uppercase only, tight tracking (tracking-tighter), solid filled and outlined variants (using text-stroke)."
+    },
+    "body_font": {
+      "family": "'Manrope', 'IBM Plex Sans', sans-serif",
+      "usage": "Body text, UI elements, small concise copy, buttons",
+      "style": "Highly readable, normal to medium weight, standard tracking."
+    }
+  },
+  "colors": {
+    "background": "#F5F0E8",
+    "text_primary": "#111111",
+    "primary": "#111111",
+    "accents": {
+      "yellow": "#FFE45C",
+      "red": "#FF5C5C",
+      "blue": "#45B7D1",
+      "green": "#4ade80",
+      "purple": "#c084fc",
+      "orange": "#fb923c"
+    }
+  },
+  "visual_enhancers": {
+    "neo_brutalism": {
+      "borders": "Thick solid black borders (border-2 or border-4 border-[#111111]) on cards, inputs, and buttons.",
+      "shadows": "Hard offset shadows: box-shadow: 8px 8px 0px 0px #111111.",
+      "corners": "Sharp corners (rounded-none).",
+      "interactions": "Physical press interactions. On hover/active, the element translates down and right to overlap its shadow, while the shadow reduces. e.g., active:translate-x-[8px] active:translate-y-[8px] active:shadow-none."
+    },
+    "graphic_language": "Custom ASCII/SVG graphic elements acting as editorial ornaments: oversized punctuation marks, arrows, stars (4-point or multi-point), circles, registration marks, crop marks, editorial lines, and brackets."
+  },
+  "grids_and_layouts": {
+    "strategy": "Swiss-inspired editorial grid system. Aggressive asymmetry.",
+    "spacing": "Generous padding, tight internal lockups. Use massive negative space to build tension between giant typography and very small precise UI text."
+  },
+  "components": {
+    "navigation": {
+      "type": "Fixed Minimal Nav",
+      "elements": "Logo (HERMES SOFTWARE INC.®), Links: ABOUT, WORK/SERVICES, PRICING, FAQ. Controls: EN/TR Language Toggle, [START A PROJECT] bold button.",
+      "behavior": "Solid background with thick bottom border to separate from scrolling content. START A PROJECT opens a Contact Form Modal."
+    },
+    "hero": {
+      "type": "Kinetic Editorial Poster",
+      "content": "'WE TURN IDEAS INTO SOFTWARE.' or 'WE MAKE THINGS MOVE.'",
+      "visuals": "Oversized typography acting as graphic art. Asymmetric layout.",
+      "motion": "Hard-easing on-load reveal. Masked line-by-line text reveal using framer-motion."
+    },
+    "marquee": {
+      "type": "Full-width Infinite Ticker",
+      "content": "SOFTWARE / PRODUCT / DESIGN / ENGINEERING / BRAND / AUTOMATION / DIGITAL PRODUCTS",
+      "styling": "Thick top and bottom borders, vibrant background (e.g., Yellow or Red), large bold uppercase text. Linear continuous scroll."
+    },
+    "who_we_are": {
+      "layout": "Visual tension layout.",
+      "content": "Giant bold statement occupying 70% of the grid vs. concise, tiny, strictly formatted paragraph copy occupying 30%."
+    },
+    "services_grid": {
+      "type": "Editorial Bento/Grid",
+      "items": ["WEB APPLICATIONS", "MOBILE APPLICATIONS", "CUSTOM SOFTWARE", "DIGITAL PRODUCTS", "AUTOMATION", "BRAND IDENTITY"],
+      "styling": "Varied card sizes (col-span-1, col-span-2), different vibrant background colors per card. NOT six identical cards. Some with outlined text, some with solid text."
+    },
+    "testimonials": {
+      "type": "Asynchronous Auto-scrolling Wall",
+      "layout": "3 vertical columns of cards.",
+      "motion": "Columns scroll slowly in opposite directions (up, down, up).",
+      "content": "Clearly marked placeholder text (e.g., 'LOREM IPSUM CLIENT QUOTE'). Include avatar placeholders (use provided creative portraits)."
+    },
+    "pricing_estimator": {
+      "type": "Interactive Calculator Tool",
+      "title": "WHAT ARE WE BUILDING?",
+      "features": "Project type selection, complexity toggle, add-ons. Currency switch (USD/EUR/TRY).",
+      "styling": "Physical neo-brutalist controls (heavy toggles, big clickable blocks, NOT boring form radios).",
+      "output": "Massive animated rolling number for estimated project value."
+    },
+    "faq": {
+      "type": "Editorial Accordion",
+      "count": "Exactly 5 questions.",
+      "styling": "Oversized leading numbers (01, 02...). Thick borders between rows. Sharp open/close animations."
+    },
+    "final_cta": {
+      "type": "Giant Visual Moment",
+      "content": "HAVE AN IDEA? LET'S BUILD IT.",
+      "styling": "Strongest accent color background (e.g., Blue or Red). Largest typography on the site. Massive interactive button."
+    },
+    "footer": {
+      "type": "Minimalist",
+      "content": "HERMES SOFTWARE INC.® / ISTANBUL, TURKEY / EMAIL INSTAGRAM GITHUB LINKEDIN / © 2026 / BUILT WITH INTENT.",
+      "styling": "Grid alignment, uppercase, mono-spaced or clean sans."
+    },
+    "contact_modal": {
+      "type": "Dialog / Modal",
+      "styling": "Neo-brutalist window. Thick borders, flat colors. Saved to backend conceptually (use standard form logic)."
+    }
+  },
+  "motion_and_interactions": {
+    "scroll": "Lenis smooth scrolling is REQUIRED for the editorial, momentum-heavy feel.",
+    "animations": "Framer Motion for scroll-triggered typography displacement, clip-path reveals, and hard easing (e.g., cubic-bezier(0.87, 0, 0.13, 1)).",
+    "banned_motion": "NO generic fadeInUp everywhere. Use purposeful kinetic motion."
+  },
+  "accessibility": {
+    "contrast": "Ensure text over vibrant colors meets APCA/WCAG standards. Use Black (#111111) text on Yellow, Red, Blue, and Green.",
+    "focus": "Thick offset focus rings.",
+    "testing": "All interactive elements MUST include data-testid attributes (e.g., data-testid='pricing-currency-toggle')."
+  },
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.unsplash.com/photo-1581841064838-a470c740e8ee?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHw0fHxjcmVhdGl2ZSUyMHBvcnRyYWl0JTIwc3R1ZGlvfGVufDB8fHx8MTc4ODEwMzMzN3ww&ixlib=rb-4.1.0&q=85",
+        "description": "Woman in green shirt, creative portrait",
+        "category": "testimonials_avatar"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1506863530036-1efeddceb993?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMHBvcnRyYWl0JTIwc3R1ZGlvfGVufDB8fHx8MTc4ODEwMzMzN3ww&ixlib=rb-4.1.0&q=85",
+        "description": "Grayscale photo of woman, creative portrait",
+        "category": "testimonials_avatar"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1606143412458-acc5f86de897?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzV8MHwxfHNlYXJjaHwyfHxjcmVhdGl2ZSUyMHBvcnRyYWl0JTIwc3R1ZGlvfGVufDB8fHx8MTc4ODEwMzMzN3ww&ixlib=rb-4.1.0&q=85",
+        "description": "Woman in black top, creative portrait",
+        "category": "testimonials_avatar"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1586032788085-d75f745f26e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzl8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMHBvcCUyMGFydHxlbnwwfHx8fDE3ODgxMDMzMzd8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Red blue and white abstract pop art",
+        "category": "services_background_or_graphic"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1602450069437-d52c62f52a71?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzl8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMHBvcCUyMGFydHxlbnwwfHx8fDE3ODgxMDMzMzd8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Blue yellow and red abstract pop art painting",
+        "category": "services_background_or_graphic"
+      }
+    ]
+  },
+  "instructions_to_main_agent": {
+    "core_directive": "This is NOT a generic SaaS site. Execute with brutalism, pop-art contrast, and extreme structural tension. Do not center everything. Break the grid intentionally.",
+    "ui_rules": [
+      "No generic gradients. Use flat vibrant colors (#FFE45C, #FF5C5C, #45B7D1) heavily.",
+      "NEVER use generic corporate copy ('leveraging cutting-edge technology', 'end-to-end solutions', 'empowering businesses').",
+      "Buttons MUST translate into their shadow on active state to simulate physical buttons.",
+      "Use massive typography. The hero should feel like a printed poster.",
+      "Build Shadcn components natively using raw HTML/Tailwind where Shadcn is too rigid, but use Shadcn for complex interactives (Forms, Modals, Accordions).",
+      "Make sure you include Lenis for smooth scrolling in your layout."
+    ],
+    "universal_guidelines": [
+      "Avoid 'AI slop' aesthetic: don't make generic centered layouts, simplistic gradients, and uniform styling.",
+      "Create depth through layered design elements with z-index hierarchy and thick black shadow offsets.",
+      "DO NOT center align the app container (.App { text-align: center; } is banned).",
+      "Every interaction needs micro-animations - hover states, transitions, physical press effects.",
+      "Always use `data-testid` on interactive elements."
+    ]
+  }
+}
