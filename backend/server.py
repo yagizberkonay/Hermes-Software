@@ -6,6 +6,7 @@ import os
 import re
 import time
 import hmac
+import random
 import ipaddress
 import logging
 import httpx
@@ -44,6 +45,39 @@ ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 _INQUIRY_HITS: dict = {}
 _RATE_MAX = 10         # max submissions
 _RATE_WINDOW = 300     # per 5 minutes, per client IP
+
+# Lightweight, self-hosted CAPTCHA (no third-party keys): a short-lived
+# arithmetic challenge, single-use, kept in memory alongside a form honeypot.
+_CAPTCHA_STORE: dict = {}
+_CAPTCHA_TTL = 300    # 5 minutes
+
+
+def _new_captcha() -> dict:
+    now = time.time()
+    for k in [k for k, v in _CAPTCHA_STORE.items() if v[1] < now]:
+        _CAPTCHA_STORE.pop(k, None)
+    a, b = random.randint(1, 9), random.randint(1, 9)
+    if random.choice([True, False]):
+        question, answer = f"{a} + {b}", a + b
+    else:
+        hi, lo = max(a, b), min(a, b)
+        question, answer = f"{hi} - {lo}", hi - lo
+    cid = str(uuid.uuid4())
+    _CAPTCHA_STORE[cid] = (answer, now + _CAPTCHA_TTL)
+    return {"id": cid, "question": question}
+
+
+def _verify_captcha(captcha_id: str, captcha_answer: str) -> bool:
+    entry = _CAPTCHA_STORE.pop(captcha_id, None)
+    if not entry:
+        return False
+    correct, expiry = entry
+    if time.time() > expiry:
+        return False
+    try:
+        return int(str(captcha_answer).strip()) == correct
+    except ValueError:
+        return False
 
 
 def _client_ip(request: Request) -> str:
@@ -192,6 +226,9 @@ class InquiryCreate(BaseModel):
     message: str = Field(min_length=1, max_length=4000)
     estimate: Optional[str] = Field(default=None, max_length=40)
     lang: Optional[str] = Field(default="en", max_length=5)
+    captcha_id: str
+    captcha_answer: str = Field(max_length=10)
+    website: Optional[str] = Field(default="", max_length=200)  # honeypot — must stay empty
 
 
 def _inquiry_alert_html(inq: Inquiry) -> str:
@@ -223,12 +260,21 @@ def _inquiry_alert_html(inq: Inquiry) -> str:
     )
 
 
+@api_router.get("/captcha")
+async def get_captcha():
+    return _new_captcha()
+
+
 @api_router.post("/inquiries", response_model=Inquiry)
 async def create_inquiry(payload: InquiryCreate, request: Request, background_tasks: BackgroundTasks):
     client_ip = _client_ip(request)
     if _rate_limited(client_ip):
         raise HTTPException(status_code=429, detail="Too many submissions. Please try again shortly.")
-    inquiry = Inquiry(**payload.model_dump())
+    if payload.website:
+        raise HTTPException(status_code=400, detail="Invalid submission.")
+    if not _verify_captcha(payload.captcha_id, payload.captcha_answer):
+        raise HTTPException(status_code=400, detail="Incorrect answer. Please try the new question.")
+    inquiry = Inquiry(**payload.model_dump(exclude={"captcha_id", "captcha_answer", "website"}))
     doc = inquiry.model_dump()
     doc['created_at'] = doc['created_at'].isoformat()
     await db.inquiries.insert_one(doc)

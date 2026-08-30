@@ -1,1 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="1" tests="16" time="6.041" timestamp="2026-08-30T16:11:41.341696+00:00" hostname="agent-env-aa796caf-5ae6-4924-90e7-92a89f4b5fba"><testcase classname="tests.backend_test.TestAdminAuth" name="test_verify_without_header_401" time="0.333" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_and_verify_persistence" time="0.611" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_verify_wrong_password_401" time="0.084" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_verify_correct_password_ok" time="0.085" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_list_inquiries_requires_header" time="0.085" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_list_inquiries_wrong_password" time="0.073" /><testcase classname="tests.backend_test.TestInquiries" name="test_list_sorted_newest_first" time="2.816" /><testcase classname="tests.backend_test.TestHealth" name="test_root" time="0.069" /><testcase classname="tests.backend_test.TestStatus" name="test_create_and_list_status" time="0.221" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_optional_fields_defaults" time="0.381" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad0]" time="0.070" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad1]" time="0.073" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad2]" time="0.062" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad3]" time="0.074" /><testcase classname="tests.backend_test.TestInquiries" name="test_email_field_not_validated_as_email" time="0.425"><skipped type="pytest.xfail" message="email accepts arbitrary strings — no EmailStr validation" /></testcase><testcase classname="tests.backend_test.TestInquiries" name="test_owner_email_not_leaked" time="0.176" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="19" time="3.565" timestamp="2026-08-30T18:03:00.843422+00:00" hostname="agent-env-aa796caf-5ae6-4924-90e7-92a89f4b5fba"><testcase classname="tests.backend_test.TestAdminAuth" name="test_verify_without_header_401" time="0.261" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_and_verify_persistence" time="0.494" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_verify_wrong_password_401" time="0.095" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_verify_correct_password_ok" time="0.056" /><testcase classname="tests.backend_test.TestAdminAuth" name="test_list_inquiries_requires_header" time="0.096" /><testcase classname="tests.backend_test.TestInquiries" name="test_list_sorted_newest_first" time="1.348"><failure message="AssertionError: {&quot;detail&quot;:&quot;Too many submissions. Please try again shortly.&quot;}&#10;assert 429 == 200&#10; +  where 429 = &lt;Response [429]&gt;.status_code">self = &lt;backend_test.TestInquiries object at 0xf8b1e60bd650&gt;
+api_client = &lt;requests.sessions.Session object at 0xf8b1e6a32d10&gt;
+admin_headers = {'X-Admin-Password': 'hermes-studio-2026', 'Content-Type': 'application/json'}
+
+    def test_list_sorted_newest_first(self, api_client, admin_headers):
+        ids = []
+        for n in range(2):
+            solved = _solved_captcha(api_client)
+            r = api_client.post(f"{BASE_URL}/api/inquiries", json={
+                "name": f"TEST_Sort {n}",
+                "email": f"TEST_sort{n}@example.com",
+                "message": f"TEST_ ordering check {n}",
+                **solved,
+            })
+&gt;           assert r.status_code == 200, r.text
+E           AssertionError: {"detail":"Too many submissions. Please try again shortly."}
+E           assert 429 == 200
+E            +  where 429 = &lt;Response [429]&gt;.status_code
+
+tests/backend_test.py:171: AssertionError</failure></testcase><testcase classname="tests.backend_test.TestAdminAuth" name="test_list_inquiries_wrong_password" time="0.052" /><testcase classname="tests.backend_test.TestCaptcha" name="test_get_captcha_returns_question" time="0.124" /><testcase classname="tests.backend_test.TestCaptcha" name="test_wrong_captcha_answer_rejected" time="0.118" /><testcase classname="tests.backend_test.TestCaptcha" name="test_honeypot_filled_rejected" time="0.113" /><testcase classname="tests.backend_test.TestHealth" name="test_root" time="0.053" /><testcase classname="tests.backend_test.TestStatus" name="test_create_and_list_status" time="0.196" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_optional_fields_defaults" time="0.120"><failure message="AssertionError: {&quot;detail&quot;:&quot;Too many submissions. Please try again shortly.&quot;}&#10;assert 429 == 200&#10; +  where 429 = &lt;Response [429]&gt;.status_code">self = &lt;backend_test.TestInquiries object at 0xf8b1e60bdc90&gt;
+api_client = &lt;requests.sessions.Session object at 0xf8b1e6a32d10&gt;
+
+    def test_create_inquiry_optional_fields_defaults(self, api_client):
+        solved = _solved_captcha(api_client)
+        r = api_client.post(f"{BASE_URL}/api/inquiries", json={
+            "name": "TEST_Minimal",
+            "email": "TEST_min@example.com",
+            "message": "TEST_ minimal payload",
+            **solved,
+        })
+&gt;       assert r.status_code == 200, r.text
+E       AssertionError: {"detail":"Too many submissions. Please try again shortly."}
+E       assert 429 == 200
+E        +  where 429 = &lt;Response [429]&gt;.status_code
+
+tests/backend_test.py:187: AssertionError</failure></testcase><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad0]" time="0.063" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad1]" time="0.057" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad2]" time="0.062" /><testcase classname="tests.backend_test.TestInquiries" name="test_create_inquiry_validation[bad3]" time="0.055" /><testcase classname="tests.backend_test.TestInquiries" name="test_email_field_not_validated_as_email" time="0.109" /><testcase classname="tests.backend_test.TestInquiries" name="test_owner_email_not_leaked" time="0.185" /></testsuite></testsuites>

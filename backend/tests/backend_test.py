@@ -45,9 +45,44 @@ def api_client():
     return s
 
 
+def _solved_captcha(api_client):
+    r = api_client.get(f"{BASE_URL}/api/captcha")
+    assert r.status_code == 200, r.text
+    data = r.json()
+    m = re.match(r"\s*(\d+)\s*([+-])\s*(\d+)\s*", data["question"])
+    a, op, b = int(m.group(1)), m.group(2), int(m.group(3))
+    answer = a + b if op == "+" else a - b
+    return {"captcha_id": data["id"], "captcha_answer": str(answer)}
+
+
 @pytest.fixture(scope="session")
 def admin_headers():
     return {"X-Admin-Password": ADMIN_PW, "Content-Type": "application/json"}
+
+
+# --- CAPTCHA ------------------------------------------------------------
+class TestCaptcha:
+    def test_get_captcha_returns_question(self, api_client):
+        r = api_client.get(f"{BASE_URL}/api/captcha")
+        assert r.status_code == 200, r.text
+        data = r.json()
+        assert "id" in data and "question" in data
+
+    def test_wrong_captcha_answer_rejected(self, api_client):
+        solved = _solved_captcha(api_client)
+        r = api_client.post(f"{BASE_URL}/api/inquiries", json={
+            "name": "TEST_BadCaptcha", "email": "TEST_badcaptcha@example.com",
+            "message": "TEST_", "captcha_id": solved["captcha_id"], "captcha_answer": "999999",
+        })
+        assert r.status_code == 400, r.text
+
+    def test_honeypot_filled_rejected(self, api_client):
+        solved = _solved_captcha(api_client)
+        r = api_client.post(f"{BASE_URL}/api/inquiries", json={
+            "name": "TEST_Bot", "email": "TEST_bot@example.com", "message": "TEST_",
+            "website": "http://spam.example", **solved,
+        })
+        assert r.status_code == 400, r.text
 
 
 # --- Health -----------------------------------------------------------------
@@ -87,6 +122,7 @@ class TestAdminAuth:
 # --- Inquiries --------------------------------------------------------------
 class TestInquiries:
     def test_create_inquiry_and_verify_persistence(self, api_client, admin_headers):
+        solved = _solved_captcha(api_client)
         payload = {
             "name": "TEST_QA Lead",
             "email": "TEST_qa+lead@example.com",
@@ -94,6 +130,7 @@ class TestInquiries:
             "message": "TEST_ We need a marketplace with payments.",
             "estimate": "$6,750",
             "lang": "en",
+            **solved,
         }
         t0 = time.time()
         r = api_client.post(f"{BASE_URL}/api/inquiries", json=payload)
@@ -104,6 +141,8 @@ class TestInquiries:
         assert isinstance(created.get("id"), str) and len(created["id"]) > 0
         assert "_id" not in created
         for k, v in payload.items():
+            if k in ("captcha_id", "captcha_answer"):
+                continue
             assert created[k] == v, f"{k} mismatch: {created.get(k)!r} != {v!r}"
         assert "created_at" in created
         # email side-effect should not block lead capture excessively
@@ -122,10 +161,12 @@ class TestInquiries:
     def test_list_sorted_newest_first(self, api_client, admin_headers):
         ids = []
         for n in range(2):
+            solved = _solved_captcha(api_client)
             r = api_client.post(f"{BASE_URL}/api/inquiries", json={
                 "name": f"TEST_Sort {n}",
                 "email": f"TEST_sort{n}@example.com",
                 "message": f"TEST_ ordering check {n}",
+                **solved,
             })
             assert r.status_code == 200, r.text
             ids.append(r.json()["id"])
@@ -136,10 +177,12 @@ class TestInquiries:
         assert order == list(reversed(ids)), f"expected newest-first, got {order}"
 
     def test_create_inquiry_optional_fields_defaults(self, api_client):
+        solved = _solved_captcha(api_client)
         r = api_client.post(f"{BASE_URL}/api/inquiries", json={
             "name": "TEST_Minimal",
             "email": "TEST_min@example.com",
             "message": "TEST_ minimal payload",
+            **solved,
         })
         assert r.status_code == 200, r.text
         d = r.json()
@@ -159,13 +202,11 @@ class TestInquiries:
         assert r.status_code == 422, f"expected 422 for {bad}, got {r.status_code}"
 
     def test_email_field_not_validated_as_email(self, api_client):
-        """Documents that `email` is a plain str (no EmailStr validation)."""
+        """`email` uses pydantic EmailStr — arbitrary strings are rejected."""
+        solved = _solved_captcha(api_client)
         r = api_client.post(f"{BASE_URL}/api/inquiries", json={
-            "name": "TEST_BadEmail", "email": "not-an-email", "message": "TEST_"})
-        assert r.status_code in (200, 422)
-        if r.status_code == 200:
-            CREATED_INQUIRY_IDS.append(r.json().get("id"))
-            pytest.xfail("email accepts arbitrary strings — no EmailStr validation")
+            "name": "TEST_BadEmail", "email": "not-an-email", "message": "TEST_", **solved})
+        assert r.status_code == 422, r.text
 
     def test_owner_email_not_leaked(self, api_client, admin_headers):
         """OWNER_EMAIL must never appear in any API response."""

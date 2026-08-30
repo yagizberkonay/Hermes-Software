@@ -3,7 +3,7 @@ import { RegMark } from "./primitives";
 
 export default function Footer() {
   const { t } = useLang();
-  const hrefs = ["mailto:hello@hermessoftware.co", "https://instagram.com", "https://github.com", "https://linkedin.com"];
+  const hrefs = ["mailto:info@hermessoftware.space", "https://instagram.com/hermes.software"];
   return (
     <footer className="bg-[#111] text-[#F5F0E8] pt-16 pb-8" aria-label="Footer">
       <div className="max-w-[1400px] mx-auto px-5 sm:px-10">
