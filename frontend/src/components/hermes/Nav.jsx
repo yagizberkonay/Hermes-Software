@@ -13,6 +13,7 @@ export default function Nav({ onStartProject }) {
   const [open, setOpen] = useState(false);
   const links = [
     ["about", t.nav.about],
+    ["work", t.nav.work],
     ["services", t.nav.services],
     ["pricing", t.nav.pricing],
     ["faq", t.nav.faq],

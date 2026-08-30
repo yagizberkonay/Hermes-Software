@@ -8,10 +8,10 @@ export default function Faq() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="py-24 sm:py-36" aria-label="Frequently asked questions">
+    <section id="faq" className="py-32 sm:py-48" aria-label="Frequently asked questions">
       <div className="max-w-[1200px] mx-auto px-5 sm:px-10">
-        <SectionTag className="mb-10">{t.faq.tag}</SectionTag>
-        <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] mb-14 sm:mb-20">{t.faq.title}</h2>
+        <SectionTag className="mb-12">{t.faq.tag}</SectionTag>
+        <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] mb-16 sm:mb-24">{t.faq.title}</h2>
 
         <div className="border-t-[3px] border-[#111]">
           {t.faq.items.map((item, i) => {

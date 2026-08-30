@@ -32,8 +32,28 @@ Design the digital identity + website for HERMES SOFTWARE INC.®, a software stu
 - Full EN/TR i18n, prefers-reduced-motion respected, data-testids everywhere
 - Verified: curl (inquiries POST/GET), screenshots (desktop all sections, mobile hero + menu, estimator flow, modal submit, TR toggle)
 
-## Backlog
-- P0: Real testimonials (user will send) — swap into i18n.js testimonials.cards
+## Implemented — Update (July 2026)
+This iteration (per user request: mock realistic reviews, lower prices, add all features, more whitespace):
+- **Testimonials → realistic MOCK quotes** (EN+TR) with fictional client names/companies; removed all PLACEHOLDER labels/notes. (`Testimonials.jsx`, `i18n.js`)
+- **Pricing lowered to market-average** in `pricing.js` (website $1800, webapp $4500, mobile $6000, custom $7500, other $3500; multipliers 1/1.5/2.1/3; addons $800–$2200). Values remain isolated from UI.
+- **Increased whitespace** across all sections (py-32 sm:py-48, larger heading gaps, wider grid gaps).
+- **Work / Case-study showcase** (`Work.jsx`, section #work, nav "WORK"/"İŞLER"): 4 mock case studies (KOVAN, TARLA, MERIDIAN, LUMEN) in clipped editorial frames (clip-path), grayscale→color on hover, result-stat badges, alternating asymmetric layout. Content in `i18n.js` (`work`).
+- **Admin Inquiry Inbox** at route `/admin` (`Admin.jsx`): single-password gate (`ADMIN_PASSWORD` env, default `hermes-studio-2026`) sent via `X-Admin-Password` header; lists all inquiries newest-first with name/email/type/estimate/lang/message. Router added to `App.js` (`/` + `/admin`).
+- **Email alerts** on each new inquiry via Emergent-managed Resend (owner: yagizberkonay0@gmail.com, server-side only). Sent in a FastAPI BackgroundTask; guardrail gate `_assert_safe_email` per playbook.
+- **Bug fixes:** hero/RevealLine mask reveals converted to reliable CSS keyframe (`.reveal-inner.is-in`) — headless browsers throttle framer JS animations, so critical text now uses CSS + `useInView` trigger; fixed mobile horizontal overflow (global `overflow-x: clip` + About parallax gated to ≥lg); ContactModal now closes on Escape + moves focus in; Turkish uppercase İ fixed by setting `document.documentElement.lang`.
+- **Backend hardening:** `InquiryCreate.email` is `EmailStr` + length limits; in-memory per-IP rate limit (10/5min, real IP via X-Forwarded-For); admin compare via `hmac.compare_digest`.
+
+## API (current)
+- POST /api/inquiries — public (rate-limited); creates inquiry + fires owner email (background)
+- GET /api/inquiries — requires `X-Admin-Password` header (401 otherwise); newest-first
+- POST /api/admin/verify — validates admin password header
+
+## Verified (July 2026)
+- Backend pytest suite `/app/backend/tests/backend_test.py`: 16/16 pass. Email 202 in logs. EmailStr 422 on bad email. Admin 401 without header.
+- Frontend: testing agent all core flows PASS; self-verified hero reveal, Work section, Admin login+list, Turkish İ casing, no horizontal overflow (scrollWidth==clientWidth), modal Escape closes.
+
+## Backlog (remaining)
 - P1: Real social links / email in Footer.jsx (currently generic hrefs)
-- P1: Admin view for inquiries
-- P2: Case studies / work section, email notification on inquiry (Resend)
+- P1: Replace mock testimonials & mock case studies with real content when the user provides them
+- P2: Server-issued admin token instead of replaying the shared password; optional CAPTCHA on the public form
+

@@ -1,0 +1,106 @@
+import { motion } from "framer-motion";
+import { useLang } from "@/lib/i18n";
+import { SectionTag, EASE, Star4, BigArrow } from "./primitives";
+
+const ACCENTS = ["#FFE45C", "#45B7D1", "#FF5C5C", "#111"];
+const CLIPS = [
+  "polygon(0 0, 100% 0, 100% 88%, 0 100%)",
+  "polygon(0 4%, 100% 0, 100% 100%, 0 92%)",
+  "polygon(0 0, 100% 6%, 100% 100%, 0 90%)",
+  "polygon(0 8%, 100% 0, 100% 92%, 0 100%)",
+];
+
+const ProjectRow = ({ project, index }) => {
+  const flip = index % 2 === 1;
+  const accent = ACCENTS[index % ACCENTS.length];
+  const dark = accent === "#111";
+
+  return (
+    <motion.article
+      data-testid={`work-project-${index}`}
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-12%" }}
+      transition={{ duration: 0.6, ease: EASE }}
+      className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
+    >
+      {/* clipped editorial frame */}
+      <div className={`lg:col-span-7 ${flip ? "lg:order-2" : "lg:order-1"}`}>
+        <div className="group relative border-[3px] border-[#111] shadow-hard bg-[#111] overflow-hidden">
+          <div
+            className="relative overflow-hidden"
+            style={{ clipPath: CLIPS[index % CLIPS.length] }}
+          >
+            <img
+              src={project.img}
+              alt={project.title}
+              loading="lazy"
+              className="w-full h-[280px] sm:h-[420px] object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-500"
+            />
+            <span
+              className="absolute inset-0 mix-blend-multiply opacity-40 group-hover:opacity-0 transition-opacity duration-500"
+              style={{ background: accent }}
+              aria-hidden="true"
+            />
+          </div>
+          {/* result stat pinned on the frame */}
+          <div
+            className="absolute bottom-4 left-4 border-[3px] border-[#111] px-4 py-2 font-display text-lg sm:text-2xl"
+            style={{ background: accent, color: dark ? "#F5F0E8" : "#111" }}
+            data-testid={`work-result-${index}`}
+          >
+            {project.result}
+          </div>
+        </div>
+      </div>
+
+      {/* text block */}
+      <div className={`lg:col-span-5 ${flip ? "lg:order-1" : "lg:order-2"}`}>
+        <div className="flex items-center gap-4 mb-5">
+          <span className="font-display text-4xl sm:text-5xl text-outline">{String(index + 1).padStart(2, "0")}</span>
+          <span className="font-mono-label text-[10px] font-bold border-[3px] border-[#111] px-3 py-1.5">
+            {project.category}
+          </span>
+          <span className="font-mono-label text-[10px] font-semibold text-[#111]/50 ml-auto">{project.year}</span>
+        </div>
+        <h3 className="font-display text-[clamp(2.4rem,6vw,4.5rem)] leading-[0.9] mb-5 flex items-center gap-3">
+          {project.title}
+          <Star4 size={26} fill="#111" className="hidden sm:inline-block group-hover:rotate-45 transition-transform" />
+        </h3>
+        <p className="text-sm sm:text-base font-semibold leading-relaxed text-[#111]/75 max-w-md">{project.desc}</p>
+      </div>
+    </motion.article>
+  );
+};
+
+export default function Work({ onStartProject }) {
+  const { t } = useLang();
+  return (
+    <section id="work" className="py-32 sm:py-48" aria-label="Selected work">
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-10">
+        <SectionTag className="mb-12">{t.work.tag}</SectionTag>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-20 sm:mb-28">
+          <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] leading-[0.9]">{t.work.title}</h2>
+          <p className="font-semibold text-sm sm:text-base max-w-xs">{t.work.sub}</p>
+        </div>
+
+        <div className="space-y-28 sm:space-y-40">
+          {t.work.projects.map((project, i) => (
+            <ProjectRow key={i} project={project} index={i} />
+          ))}
+        </div>
+
+        <div className="mt-28 sm:mt-40 flex justify-center">
+          <button
+            data-testid="work-start-project"
+            onClick={() => onStartProject()}
+            className="btn-press bg-[#111] text-[#F5F0E8] border-[3px] border-[#111] shadow-hard-lg font-display text-2xl sm:text-3xl px-10 sm:px-14 py-5 sm:py-6 flex items-center gap-4"
+          >
+            {t.work.cta}
+            <BigArrow size={34} fill="#F5F0E8" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}

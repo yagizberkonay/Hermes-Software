@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { motion, animate } from "framer-motion";
+import { motion, animate, useInView } from "framer-motion";
 
 export const EASE = [0.87, 0, 0.13, 1];
 
@@ -20,22 +20,17 @@ export const SectionTag = ({ children, className = "" }) => (
   </div>
 );
 
-export const RevealLine = ({ children, delay = 0, className = "", once = true }) => (
-  <motion.span
-    className={`block overflow-hidden ${className}`}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once, amount: 0.1 }}
-  >
-    <motion.span
-      className="block"
-      variants={{ hidden: { y: "110%" }, visible: { y: 0 } }}
-      transition={{ duration: 0.7, delay, ease: EASE }}
-    >
-      {children}
-    </motion.span>
-  </motion.span>
-);
+export const RevealLine = ({ children, delay = 0, className = "" }) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.1 });
+  return (
+    <span ref={ref} className={`reveal-mask ${className}`}>
+      <span className={`reveal-inner ${inView ? "is-in" : ""}`} style={{ animationDelay: `${delay}s` }}>
+        {children}
+      </span>
+    </span>
+  );
+};
 
 export const AnimatedNumber = ({ value, format }) => {
   const ref = useRef(null);

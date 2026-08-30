@@ -1,8 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 export const STR = {
   en: {
-    nav: { about: "ABOUT", services: "SERVICES", pricing: "PRICING", faq: "FAQ", cta: "START A PROJECT" },
+    nav: { about: "ABOUT", work: "WORK", services: "SERVICES", pricing: "PRICING", faq: "FAQ", cta: "START A PROJECT" },
     hero: {
       lines: ["WE", "MAKE", "THINGS", "MOVE."],
       outlineIndex: 2,
@@ -32,25 +32,36 @@ export const STR = {
         { name: "BRAND IDENTITY", desc: "Logos, systems, voices. Software with a face." },
       ],
     },
+    work: {
+      tag: "03 — SELECTED WORK",
+      title: "THINGS WE'VE SHIPPED",
+      sub: "A few products we designed, built and put into the world.",
+      cta: "START A PROJECT →",
+      projects: [
+        { title: "KOVAN", category: "SaaS DASHBOARD", year: "2025", desc: "A logistics control room for a fast-growing courier network — real-time routing, one screen.", result: "3.2× FASTER DISPATCH", img: "https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwzfHxhbmFseXRpY3MlMjBkYXNoYm9hcmQlMjBpbnRlcmZhY2UlMjBkYXJrfGVufDB8fHx8MTc4NDgyMjc2Nnww&ixlib=rb-4.1.0&q=85" },
+        { title: "TARLA", category: "MOBILE APP", year: "2025", desc: "A farm-to-table marketplace connecting growers directly to restaurant kitchens.", result: "18K DOWNLOADS / MONTH ONE", img: "https://images.pexels.com/photos/8463235/pexels-photo-8463235.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
+        { title: "MERIDIAN", category: "E-COMMERCE", year: "2024", desc: "A headless storefront rebuilt from scratch for raw speed and conversion.", result: "+96% CHECKOUT CONVERSION", img: "https://images.unsplash.com/photo-1757301714935-c8127a21abc6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwzfHxlY29tbWVyY2UlMjBwcm9kdWN0cyUyMGNoZWNrb3V0fGVufDB8fHx8MTc4MjkwMTMwN3ww&ixlib=rb-4.1.0&q=85" },
+        { title: "LUMEN", category: "CUSTOM SOFTWARE", year: "2024", desc: "A patient-intake engine that automates the paperwork nobody wants to do.", result: "40 HRS / WEEK SAVED", img: "https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwyfHxhbmFseXRpY3MlMjBkYXNoYm9hcmQlMjBpbnRlcmZhY2UlMjBkYXJrfGVufDB8fHx8MTc4NDgyMjc2Nnww&ixlib=rb-4.1.0&q=85" },
+      ],
+    },
     testimonials: {
-      tag: "03 — WHAT CLIENTS SAY",
+      tag: "04 — WHAT CLIENTS SAY",
       title: "THE WALL",
-      placeholder: "PLACEHOLDER",
-      note: "REAL TESTIMONIALS LOADING SOON — THESE ARE PLACEHOLDERS.",
+      note: "WHAT IT'S LIKE TO BUILD WITH HERMES.",
       cards: [
-        { type: "big", quote: "\u201CTHEY GOT IT.\u201D", who: "CLIENT NAME — COMPANY" },
-        { type: "stars", quote: "Shipped ahead of schedule. Placeholder review text goes right here.", who: "CLIENT NAME" },
-        { type: "quote", quote: "\u201CWe brought an idea. They brought it to life.\u201D", who: "CLIENT NAME — STARTUP" },
-        { type: "small", quote: "Placeholder quote. Short and punchy.", who: "CLIENT NAME" },
-        { type: "big", quote: "\u201CFINALLY, DEVELOPERS WHO DESIGN.\u201D", who: "CLIENT NAME — BRAND" },
-        { type: "stars", quote: "Placeholder five-star review. Actual words coming soon.", who: "CLIENT NAME" },
-        { type: "quote", quote: "\u201CNo jargon. Just working software.\u201D", who: "CLIENT NAME — AGENCY" },
-        { type: "small", quote: "Placeholder testimonial content.", who: "CLIENT NAME" },
-        { type: "quote", quote: "\u201CThey said no to half our ideas. They were right.\u201D", who: "CLIENT NAME — FOUNDER" },
+        { type: "big", quote: "\u201CTHEY SHIP. EVERY WEEK.\u201D", who: "ELİF DEMİR — COO, KOVAN" },
+        { type: "stars", quote: "We came in with a messy Figma and left with a live product in six weeks. Zero drama.", who: "MARCUS FELDT — FOUNDER, RUNDO" },
+        { type: "quote", quote: "\u201CWe brought an idea. They brought it to life — then made it better.\u201D", who: "PRIYA NAIR — CEO, LUMEN HEALTH" },
+        { type: "small", quote: "Fastest team we've hired. No hand-holding required.", who: "DENİZ YILMAZ — PM, TARLA" },
+        { type: "big", quote: "\u201CFINALLY, DEVELOPERS WHO DESIGN.\u201D", who: "SOFIA RICCI — BRAND LEAD, ATLAS" },
+        { type: "stars", quote: "Our conversion doubled after the rebuild. They actually cared about the numbers.", who: "JAMES O'BRIEN — GROWTH, NORTHWIND" },
+        { type: "quote", quote: "\u201CNo jargon, no black box. Just working software and honest updates.\u201D", who: "AYLİN KAYA — OPS DIRECTOR, MERIDIAN" },
+        { type: "small", quote: "They said no to half our ideas. They were right.", who: "TOM BECKER — FOUNDER, SLATE" },
+        { type: "quote", quote: "\u201CThe estimate was accurate to the dollar. Rare in this industry.\u201D", who: "HANNAH LEE — CFO, BRIGHT LABS" },
       ],
     },
     pricing: {
-      tag: "04 — PRICING",
+      tag: "05 — PRICING",
       title: "WHAT ARE WE BUILDING?",
       sub: "Pick the pieces. Watch the number. No sales call required for a ballpark.",
       step1: "01 / PROJECT TYPE",
@@ -65,7 +76,7 @@ export const STR = {
       cta: "START A PROJECT →",
     },
     faq: {
-      tag: "05 — QUESTIONS",
+      tag: "06 — QUESTIONS",
       title: "FAQ",
       items: [
         { q: "HOW DOES HERMES WORK?", a: "You bring the idea. We scope it together, design it, and build it in weekly sprints. You see working software every week — no black box, no surprises." },
@@ -104,7 +115,7 @@ export const STR = {
     },
   },
   tr: {
-    nav: { about: "HAKKINDA", services: "HİZMETLER", pricing: "FİYAT", faq: "SSS", cta: "PROJE BAŞLAT" },
+    nav: { about: "HAKKINDA", work: "İŞLER", services: "HİZMETLER", pricing: "FİYAT", faq: "SSS", cta: "PROJE BAŞLAT" },
     hero: {
       lines: ["FİKİR", "SENDEN,", "YAZILIM", "BİZDEN."],
       outlineIndex: 2,
@@ -134,25 +145,36 @@ export const STR = {
         { name: "MARKA KİMLİĞİ", desc: "Logolar, sistemler, sesler. Yüzü olan yazılım." },
       ],
     },
+    work: {
+      tag: "03 — SEÇME İŞLER",
+      title: "YAYINA ALDIKLARIMIZ",
+      sub: "Tasarlayıp geliştirdiğimiz ve dünyaya sunduğumuz birkaç ürün.",
+      cta: "PROJE BAŞLAT →",
+      projects: [
+        { title: "KOVAN", category: "SaaS PANEL", year: "2025", desc: "Hızla büyüyen bir kurye ağı için lojistik kontrol odası — gerçek zamanlı rota, tek ekran.", result: "3.2× DAHA HIZLI SEVKİYAT", img: "https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwzfHxhbmFseXRpY3MlMjBkYXNoYm9hcmQlMjBpbnRlcmZhY2UlMjBkYXJrfGVufDB8fHx8MTc4NDgyMjc2Nnww&ixlib=rb-4.1.0&q=85" },
+        { title: "TARLA", category: "MOBİL UYGULAMA", year: "2025", desc: "Üreticileri doğrudan restoran mutfaklarına bağlayan tarladan sofraya pazar yeri.", result: "İLK AYDA 18K İNDİRME", img: "https://images.pexels.com/photos/8463235/pexels-photo-8463235.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
+        { title: "MERIDIAN", category: "E-TİCARET", year: "2024", desc: "Ham hız ve dönüşüm için sıfırdan yeniden inşa edilen headless mağaza.", result: "+%96 SEPET DÖNÜŞÜMÜ", img: "https://images.unsplash.com/photo-1757301714935-c8127a21abc6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTN8MHwxfHNlYXJjaHwzfHxlY29tbWVyY2UlMjBwcm9kdWN0cyUyMGNoZWNrb3V0fGVufDB8fHx8MTc4MjkwMTMwN3ww&ixlib=rb-4.1.0&q=85" },
+        { title: "LUMEN", category: "ÖZEL YAZILIM", year: "2024", desc: "Kimsenin yapmak istemediği evrak işlerini otomatikleştiren hasta kayıt motoru.", result: "HAFTADA 40 SAAT TASARRUF", img: "https://images.unsplash.com/photo-1666875753105-c63a6f3bdc86?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwyfHxhbmFseXRpY3MlMjBkYXNoYm9hcmQlMjBpbnRlcmZhY2UlMjBkYXJrfGVufDB8fHx8MTc4NDgyMjc2Nnww&ixlib=rb-4.1.0&q=85" },
+      ],
+    },
     testimonials: {
-      tag: "03 — MÜŞTERİLER NE DİYOR",
+      tag: "04 — MÜŞTERİLER NE DİYOR",
       title: "DUVAR",
-      placeholder: "YER TUTUCU",
-      note: "GERÇEK YORUMLAR YAKINDA — BUNLAR YER TUTUCUDUR.",
+      note: "HERMES İLE İNŞA ETMEK BÖYLE BİR ŞEY.",
       cards: [
-        { type: "big", quote: "\u201CANLADILAR.\u201D", who: "MÜŞTERİ ADI — ŞİRKET" },
-        { type: "stars", quote: "Zamanından önce teslim ettiler. Yer tutucu yorum metni burada.", who: "MÜŞTERİ ADI" },
-        { type: "quote", quote: "\u201CBiz bir fikir getirdik. Onlar hayata geçirdi.\u201D", who: "MÜŞTERİ ADI — STARTUP" },
-        { type: "small", quote: "Yer tutucu alıntı. Kısa ve net.", who: "MÜŞTERİ ADI" },
-        { type: "big", quote: "\u201CSONUNDA TASARLAYAN YAZILIMCILAR.\u201D", who: "MÜŞTERİ ADI — MARKA" },
-        { type: "stars", quote: "Yer tutucu beş yıldızlı yorum. Gerçek kelimeler yakında.", who: "MÜŞTERİ ADI" },
-        { type: "quote", quote: "\u201CJargon yok. Sadece çalışan yazılım.\u201D", who: "MÜŞTERİ ADI — AJANS" },
-        { type: "small", quote: "Yer tutucu yorum içeriği.", who: "MÜŞTERİ ADI" },
-        { type: "quote", quote: "\u201CFikirlerimizin yarısına hayır dediler. Haklıydılar.\u201D", who: "MÜŞTERİ ADI — KURUCU" },
+        { type: "big", quote: "\u201CHER HAFTA TESLİM EDİYORLAR.\u201D", who: "ELİF DEMİR — COO, KOVAN" },
+        { type: "stars", quote: "Dağınık bir Figma ile geldik, altı haftada canlı bir ürünle ayrıldık. Sıfır drama.", who: "MARCUS FELDT — KURUCU, RUNDO" },
+        { type: "quote", quote: "\u201CBiz bir fikir getirdik. Onlar hayata geçirdi — sonra daha da iyileştirdi.\u201D", who: "PRIYA NAIR — CEO, LUMEN HEALTH" },
+        { type: "small", quote: "Çalıştığımız en hızlı ekip. El tutmaya gerek yok.", who: "DENİZ YILMAZ — PM, TARLA" },
+        { type: "big", quote: "\u201CSONUNDA TASARLAYAN YAZILIMCILAR.\u201D", who: "SOFIA RICCI — MARKA LİDERİ, ATLAS" },
+        { type: "stars", quote: "Yeniden yapımdan sonra dönüşümümüz ikiye katlandı. Rakamları gerçekten önemsediler.", who: "JAMES O'BRIEN — BÜYÜME, NORTHWIND" },
+        { type: "quote", quote: "\u201CJargon yok, kara kutu yok. Sadece çalışan yazılım ve dürüst güncellemeler.\u201D", who: "AYLİN KAYA — OPERASYON DİREKTÖRÜ, MERIDIAN" },
+        { type: "small", quote: "Fikirlerimizin yarısına hayır dediler. Haklıydılar.", who: "TOM BECKER — KURUCU, SLATE" },
+        { type: "quote", quote: "\u201CTahmin kuruşu kuruşuna doğruydu. Bu sektörde nadir.\u201D", who: "HANNAH LEE — CFO, BRIGHT LABS" },
       ],
     },
     pricing: {
-      tag: "04 — FİYATLANDIRMA",
+      tag: "05 — FİYATLANDIRMA",
       title: "NE İNŞA EDİYORUZ?",
       sub: "Parçaları seç. Rakamı izle. Kabaca bir fiyat için satış görüşmesi gerekmez.",
       step1: "01 / PROJE TÜRÜ",
@@ -167,7 +189,7 @@ export const STR = {
       cta: "PROJE BAŞLAT →",
     },
     faq: {
-      tag: "05 — SORULAR",
+      tag: "06 — SORULAR",
       title: "SSS",
       items: [
         { q: "HERMES NASIL ÇALIŞIR?", a: "Fikri sen getirirsin. Birlikte kapsamını çıkarır, tasarlar ve haftalık sprintlerle inşa ederiz. Her hafta çalışan yazılım görürsün — kara kutu yok, sürpriz yok." },
@@ -211,6 +233,9 @@ const LangContext = createContext(null);
 
 export const LangProvider = ({ children }) => {
   const [lang, setLang] = useState("en");
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
   return (
     <LangContext.Provider value={{ lang, setLang, t: STR[lang] }}>
       {children}

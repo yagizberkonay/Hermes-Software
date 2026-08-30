@@ -14,12 +14,12 @@ const CARD_STYLES = [
 export default function Services() {
   const { t } = useLang();
   return (
-    <section id="services" className="py-24 sm:py-36" aria-label="Services">
+    <section id="services" className="py-32 sm:py-48" aria-label="Services">
       <div className="max-w-[1400px] mx-auto px-5 sm:px-10">
-        <SectionTag className="mb-10">{t.services.tag}</SectionTag>
-        <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] mb-14 sm:mb-20">{t.services.title}</h2>
+        <SectionTag className="mb-12">{t.services.tag}</SectionTag>
+        <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] mb-16 sm:mb-24">{t.services.title}</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-7">
           {t.services.items.map((item, i) => {
             const s = CARD_STYLES[i];
             return (

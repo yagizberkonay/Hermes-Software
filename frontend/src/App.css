@@ -10,12 +10,13 @@
   --purple: #C084FC;
 }
 
-html { scroll-behavior: auto; }
+html { scroll-behavior: auto; overflow-x: clip; }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: 'Archivo', sans-serif;
+  overflow-x: clip;
 }
 
 ::selection { background: var(--yellow); color: var(--ink); }
@@ -107,6 +108,15 @@ body {
 }
 .spin-slow { animation: spin-slow 14s linear infinite; }
 
+/* ---------- Masked line reveal (CSS-driven for reliability) ---------- */
+.reveal-mask { display: block; overflow: hidden; }
+.reveal-inner { display: block; transform: translateY(115%); will-change: transform; }
+.reveal-inner.is-in { animation: reveal-up 0.78s cubic-bezier(0.87, 0, 0.13, 1) forwards; }
+@keyframes reveal-up {
+  from { transform: translateY(115%); }
+  to { transform: translateY(0); }
+}
+
 .link-underline {
   position: relative;
 }
@@ -143,5 +153,6 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .marquee-track, .testi-col-down, .testi-col-up, .spin-slow { animation: none !important; }
+  .reveal-inner { transform: none !important; animation: none !important; }
   * { transition-duration: 0.01ms !important; }
 }

@@ -29,15 +29,15 @@ export default function Pricing({ onStartProject }) {
   const format = useCallback((v) => formatMoney(v, currency), [currency]);
 
   return (
-    <section id="pricing" className="py-24 sm:py-36" aria-label="Pricing estimator">
+    <section id="pricing" className="py-32 sm:py-48" aria-label="Pricing estimator">
       <div className="max-w-[1400px] mx-auto px-5 sm:px-10">
-        <SectionTag className="mb-10">{t.pricing.tag}</SectionTag>
-        <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] mb-4">{t.pricing.title}</h2>
-        <p className="font-semibold text-sm sm:text-base max-w-md mb-14 sm:mb-20">{t.pricing.sub}</p>
+        <SectionTag className="mb-12">{t.pricing.tag}</SectionTag>
+        <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] mb-5">{t.pricing.title}</h2>
+        <p className="font-semibold text-sm sm:text-base max-w-md mb-16 sm:mb-24">{t.pricing.sub}</p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* controls */}
-          <div className="lg:col-span-7 space-y-12">
+          <div className="lg:col-span-7 space-y-16">
             <fieldset>
               <legend className="font-mono-label text-xs font-bold mb-5 border-b-[3px] border-[#111] pb-2 w-full">{t.pricing.step1}</legend>
               <div className="flex flex-wrap gap-4">

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import { toast } from "sonner";
@@ -11,6 +11,18 @@ export default function ContactModal({ open, onClose, estimate }) {
   const { t, lang } = useLang();
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "" });
   const [sending, setSending] = useState(false);
+  const closeRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    // move focus into the dialog on open
+    closeRef.current?.focus();
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
@@ -58,6 +70,7 @@ export default function ContactModal({ open, onClose, estimate }) {
               </div>
               <button
                 data-testid="contact-modal-close"
+                ref={closeRef}
                 onClick={onClose}
                 aria-label="Close"
                 className="font-display text-3xl leading-none hover:rotate-90 transition-transform duration-200"

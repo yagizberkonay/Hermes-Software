@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useLang } from "@/lib/i18n";
 import { SectionTag, RevealLine } from "./primitives";
@@ -8,15 +8,23 @@ export default function About() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const xLeft = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const on = () => setWide(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
 
   return (
-    <section ref={ref} id="about" className="relative py-24 sm:py-36" aria-label="About Hermes">
+    <section ref={ref} id="about" className="relative py-32 sm:py-48 overflow-x-clip" aria-label="About Hermes">
       <div className="max-w-[1400px] mx-auto px-5 sm:px-10">
         <SectionTag className="mb-16 sm:mb-24">{t.about.tag}</SectionTag>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
           {/* giant statement — 70% */}
-          <motion.div style={{ x: xLeft }} className="lg:col-span-8" key={lang}>
+          <motion.div style={{ x: wide ? xLeft : 0 }} className="lg:col-span-8" key={lang}>
             <h2 className="font-display leading-[0.9]">
               {t.about.statement.map(([line], i) => (
                 <RevealLine key={i} delay={i * 0.08}>

@@ -1,0 +1,75 @@
+{
+  "summary": "Full-stack test of HERMES SOFTWARE INC. marketing site. Backend: created /app/backend/tests/backend_test.py (16 tests) covering health, inquiry create/persist/sort/validation, admin X-Admin-Password gate, owner-email-leak check, legacy status endpoints -> 15 passed, 1 xfail (documented). Owner alert email confirmed sending (Resend 202 in backend logs). Frontend (Playwright, 1920x1080 + 768 + 390): hero reveal, all 7 sections, nav scroll to all 5 anchors, Work showcase (4 case studies, images load, result badges), testimonials wall (realistic quotes, no PLACEHOLDER), estimator math + USD/EUR/TRY, contact modal from nav/CTA/work/pricing with estimate badge, submit -> 200 + success toast + modal close, TR language toggle (nav/FAQ/testimonials), and /admin gate (wrong pw error, correct pw unlocks list of 5 with count, logout + reload re-gates). All core flows PASS. Two real defects found: 20px horizontal overflow on mobile caused by an unclamped parallax translateX in About.jsx, and Escape key does not close the contact modal. Also flagged: the review request's expected estimator value ($6,750) is arithmetically wrong - code correctly returns $8,550.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/inquiries", "issue": "`email` is typed `str`, not `EmailStr`. Payload {\"email\": \"not-an-email\"} is accepted and returns 200. Frontend has type=email so UI is safe, but the API accepts garbage leads. Recommend pydantic EmailStr."},
+      {"endpoint": "GET /api/inquiries", "issue": "Sorting is done on `created_at` stored as an ISO **string**, so ordering is lexicographic. It works today (all UTC, same format) but will silently break if a naive/offset-varying timestamp is ever written. Prefer storing a BSON date or normalising the string."},
+      {"endpoint": "POST /api/inquiries", "issue": "No rate limiting / spam protection on the public lead endpoint; each POST also triggers an outbound email, so it is trivially abusable to spam the owner's inbox."},
+      {"endpoint": "POST /api/inquiries", "issue": "Owner email is sent inline (awaited) inside the request handler. Measured ~1.5s added latency; a slow Resend response would directly slow the user's submit. Consider BackgroundTasks."},
+      {"endpoint": "POST /api/admin/verify", "issue": "Password compared with `!=` (not hmac.compare_digest) and no attempt throttling — brute-forceable on a single shared password."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "About.jsx (section#about heading block)",
+        "issue": "HORIZONTAL PAGE OVERFLOW on mobile. `const xLeft = useTransform(scrollYProgress, [0,1], [-40,40])` is applied as `style={{x: xLeft}}` to `<motion.div className=\"lg:col-span-8\">`. At 390px the block is already full width (350px + px-5 gutters), so the +40px shift pushes its right edge to 410px => document.scrollWidth 410 vs clientWidth 390, producing a horizontal scrollbar / content shifted off-screen for the whole page. Reproduced at 390x844 (clean at 768 and 1920).",
+        "selector": "section#about div.lg\\:col-span-8 (inline style transform: translateX(40px))",
+        "priority": "HIGH"
+      },
+      {
+        "component": "ContactModal.jsx",
+        "issue": "Escape key does NOT close the modal. Element is role=\"dialog\" aria-modal=\"true\" but there is no keydown handler; overlay click works. Also no focus trap and focus is not moved into the dialog on open (a11y gap).",
+        "selector": "[role='dialog'][aria-modal='true']",
+        "priority": "MEDIUM"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Testimonials wall (TR)",
+        "issues": [
+          "Turkish uppercase transform loses the dotted capital I on some quotes: card renders 'BIZ BIR FIKIR GETIRDIK. ONLAR HAYATA GEÇIRDI - SONRA DAHA DA IYILEŞTIRDI.' Should be 'BİZ BİR FİKİR GETİRDİ... İYİLEŞTİRDİ'. Other cards are correct ('HER HAFTA TESLİM EDİYORLAR'), so the source strings in i18n.js are inconsistent — either pre-uppercase the TR strings with correct İ or avoid CSS text-transform for TR."
+        ]
+      },
+      {
+        "screen": "Pricing section on mobile (390px)",
+        "issues": [
+          "Large dead vertical whitespace (~600px) between the estimate card and the FAQ section; #pricing measures 1913px tall on mobile. Likely the desktop sticky/grid spacer not collapsing at small widths."
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix mobile horizontal overflow: clamp/disable the About.jsx parallax translateX below the lg breakpoint (e.g. gate xLeft on a media query, reduce the range, or add overflow-x-clip to the section/body).",
+    "Add an Escape-key handler (and ideally initial focus + focus trap) to ContactModal.",
+    "Change Inquiry.email to pydantic EmailStr and add basic rate limiting to POST /api/inquiries (public endpoint that triggers outbound email).",
+    "Move the owner alert email to a FastAPI BackgroundTask so email latency never blocks the submit response.",
+    "Use hmac.compare_digest for the admin password comparison.",
+    "Fix the Turkish uppercase İ in the affected i18n testimonial strings.",
+    "Review the excess vertical whitespace in #pricing at mobile widths.",
+    "NOTE (no code change needed): the review request expected WEB APP + MEDIUM + BACKEND = $6,750, but 4500*1.5 + 1800 = $8,550, which is what the app returns. pricing.js is correct; the stated expectation was an arithmetic slip. Confirm $8,550 is the intended market-average price point."
+  ],
+  "critical_code_review_comments": [
+    "About.jsx: parallax x-offsets must be viewport-aware — any translateX on a full-bleed block creates document-level horizontal overflow on mobile. Consider a global `overflow-x: clip` on html/body as a safety net.",
+    "server.py: `logger` is defined at line 268 but referenced at line 208 inside create_inquiry. It resolves at call time so it works, but move the logging config above the route definitions to avoid a latent NameError if the email path ever runs during import/startup.",
+    "server.py: create_inquiry awaits send_email inline; wrap in BackgroundTasks so a slow/failed Resend call cannot degrade lead capture latency.",
+    "Admin.jsx: the password is persisted in sessionStorage and re-sent on every request. Acceptable for a single-password private page, but a short-lived server-issued token would be better than replaying the raw secret.",
+    "Inquiry model: `email: str` and `message: str` have no length limits — unbounded strings go straight into Mongo and into the outbound email HTML. Add max_length constraints."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py"
+  ],
+  "success_rate": {"backend": "94% (15/16 passed, 1 xfail documenting missing EmailStr validation)", "frontend": "90% (all core flows pass; 1 HIGH mobile overflow bug, 1 MEDIUM modal a11y bug)"},
+  "seed_data_creation": "Created TEST_-prefixed inquiries and status_checks via API during testing; all removed afterwards (backend_test.py has an xdist-safe id-tracking teardown, and Playwright-created TEST_ inquiries were deleted from Mongo). 3 pre-existing non-TEST inquiries left untouched.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "Admin password `hermes-studio-2026` from /app/memory/test_credentials.md — verified working via both POST /api/admin/verify (X-Admin-Password header) and the /admin UI gate. Credentials file is present and accurate.",
+  "context_for_next_testing_agent": "Backend regression suite lives at /app/backend/tests/backend_test.py; run `cd /app/backend && python -m pytest tests/backend_test.py -v` (pytest.ini enables xdist loadscope — do NOT add a session teardown that deletes by name regex, it races across workers; the suite tracks created ids instead). Frontend testing notes: (1) the hero headline is split into separate lines so `get_by_text('WE MAKE THINGS MOVE.')` will NOT match — assert per-word or on `.reveal-inner`; (2) call `await page.evaluate(\"() => document.getAnimations().forEach(a=>{try{a.finish()}catch(e){}})\")` before visibility asserts; (3) jump to sections with `window.__lenis.scrollTo(el,{immediate:true,force:true})`; (4) the sonner success toast auto-dismisses in ~4s — poll for `[data-sonner-toast]` in short intervals, do not wait 7s; (5) estimator uses AnimatedNumber so allow ~2.5s after each change before reading `[data-testid=\"pricing-estimate-value\"]`. Not yet covered: Services card interactions, Ticker, footer external link targets, and re-verification of the two open bugs (About mobile overflow, modal Escape).",
+  "rca_of_the_issue": "MOBILE HORIZONTAL OVERFLOW — Root cause: /app/frontend/src/components/hermes/About.jsx line 10 defines `useTransform(scrollYProgress, [0,1], [-40,40])`, bound at line 19 to `<motion.div style={{x: xLeft}} className=\"lg:col-span-8\">`. The class only constrains width at >=lg; at mobile widths the div spans the full content box (350px inside px-5 gutters at a 390px viewport). Scrolling drives x to +40px, so the element's right edge reaches 410px while documentElement.clientWidth is 390px. Nothing in index.css/App.css clips overflow-x at the html/body level, so the whole document becomes horizontally scrollable. Reproduction: viewport 390x844 -> scroll #about/#services into view -> `document.documentElement.scrollWidth` reads 410 (it reads 390 at the very top before the parallax engages, which is why it is easy to miss). Verified clean at 768px and 1920px. Mitigation: make the parallax range responsive (0 below lg) or add `overflow-x: clip` to html/body."
+}
