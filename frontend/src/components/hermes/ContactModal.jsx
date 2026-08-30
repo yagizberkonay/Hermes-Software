@@ -139,9 +139,10 @@ export default function ContactModal({ open, onClose, estimate }) {
               </div>
               <div>
                 <label data-testid="contact-label-captcha" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-captcha">{t.contact.captchaLabel}</label>
-                <div className="flex items-stretch gap-2">
+                <div className="grid grid-cols-[minmax(110px,1fr)_80px_48px] items-stretch gap-2">
                   <span
-                    className="input-brutal flex items-center justify-center font-display text-lg min-w-[110px] bg-[#FFE45C] select-none"
+                    className="input-brutal flex w-auto items-center justify-center font-display text-lg bg-[#FFE45C] select-none"
+                    style={{ width: "auto" }}
                     data-testid="contact-captcha-question"
                   >
                     {`${captcha.question} =`}
@@ -149,7 +150,7 @@ export default function ContactModal({ open, onClose, estimate }) {
                   <input
                     id="c-captcha"
                     data-testid="contact-captcha-input"
-                    className="input-brutal flex-1"
+                    className="input-brutal min-w-0"
                     inputMode="numeric"
                     required
                     value={captchaAnswer}
