@@ -14,6 +14,7 @@ export default function ContactModal({ open, onClose, estimate }) {
   const { t, lang } = useLang();
   const [form, setForm] = useState({ name: "", email: "", project_type: "", message: "", website: "" });
   const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState("idle");
   const [captcha, setCaptcha] = useState(makeChallenge);
   const [captchaAnswer, setCaptchaAnswer] = useState("");
   const closeRef = useRef(null);
@@ -25,6 +26,7 @@ export default function ContactModal({ open, onClose, estimate }) {
 
   useEffect(() => {
     if (!open) return;
+    setStatus("idle");
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
     };
@@ -39,6 +41,7 @@ export default function ContactModal({ open, onClose, estimate }) {
   const submit = async (e) => {
     e.preventDefault();
     if (form.website || captchaAnswer.trim() !== captcha.answer) {
+      setStatus("error");
       toast.error(t.contact.captchaError);
       refreshCaptcha();
       return;
@@ -55,9 +58,9 @@ export default function ContactModal({ open, onClose, estimate }) {
     ].filter(Boolean).join("\n");
 
     window.location.href = `mailto:info@hermessoftware.space?subject=${encodeURIComponent(`${t.contact.title}: ${form.name}`)}&body=${encodeURIComponent(details)}`;
-    toast.success(t.contact.emailDraft);
     setSending(false);
-    onClose();
+    setStatus("success");
+    toast.success(t.contact.emailDraft);
   };
 
   return (
@@ -98,7 +101,7 @@ export default function ContactModal({ open, onClose, estimate }) {
               </button>
             </div>
 
-            <form onSubmit={submit} className="p-6 space-y-4">
+            {status === "success" ? <div className="p-8 sm:p-12" role="status" aria-live="polite"><div className="border-[3px] border-[#111] bg-[#45B7D1] p-6"><p className="font-display text-5xl leading-none mb-5">RECEIVED.</p><p className="font-display text-3xl">WE'LL TAKE A LOOK.</p><p className="font-semibold mt-6">{t.contact.emailDraft}</p></div><button type="button" onClick={onClose} className="btn-press mt-7 bg-[#111] text-[#F5F0E8] border-[3px] border-[#111] shadow-hard font-display text-xl px-6 py-4">CLOSE →</button></div> : <form onSubmit={submit} className="p-6 space-y-4">
               <p className="font-semibold text-sm">{t.contact.sub}</p>
               {estimate && (
                 <p className="font-mono-label text-[10px] font-bold bg-[#45B7D1] border-[3px] border-[#111] inline-block px-3 py-1.5" data-testid="contact-estimate-badge">
@@ -176,7 +179,7 @@ export default function ContactModal({ open, onClose, estimate }) {
               >
                 {sending ? t.contact.sending : t.contact.submit}
               </button>
-            </form>
+            </form>}
           </motion.div>
         </motion.div>
       )}

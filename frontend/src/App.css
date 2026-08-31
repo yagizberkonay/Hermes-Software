@@ -156,3 +156,15 @@ body {
   .reveal-inner { transform: none !important; animation: none !important; }
   * { transition-duration: 0.01ms !important; }
 }
+
+/* ---------- Feature overlays + branded loading ---------- */
+.hermes-loading { display: inline-flex; align-items: center; gap: 14px; border: 3px solid var(--ink); background: var(--yellow); padding: 10px 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; }
+.loading-mark { display: inline-flex; align-items: flex-end; gap: 3px; height: 16px; }
+.loading-mark i { display: block; width: 4px; height: 7px; background: var(--ink); animation: loading-bars .8s cubic-bezier(.87,0,.13,1) infinite alternate; }
+.loading-mark i:nth-child(2) { height: 13px; animation-delay: .12s; }
+.loading-mark i:nth-child(3) { height: 10px; animation-delay: .24s; }
+@keyframes loading-bars { to { transform: translateY(-5px) rotate(12deg); } }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:disabled { cursor: wait; }
+.input-brutal:invalid:not(:placeholder-shown) { border-color: var(--red); }
+@media (prefers-reduced-motion: reduce) { .loading-mark i { animation: none !important; } }

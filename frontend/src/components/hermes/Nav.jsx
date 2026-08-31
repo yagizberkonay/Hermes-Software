@@ -8,7 +8,7 @@ const scrollTo = (id) => {
   else el.scrollIntoView({ behavior: "smooth" });
 };
 
-export default function Nav({ onStartProject }) {
+export default function Nav({ onStartProject, onSearch, commandTrigger }) {
   const { lang, setLang, t } = useLang();
   const [open, setOpen] = useState(false);
   const links = [
@@ -55,6 +55,8 @@ export default function Nav({ onStartProject }) {
               </button>
             ))}
           </div>
+          {onSearch && <button type="button" onClick={onSearch} className="font-mono-label text-[10px] font-bold px-3 border-l-[3px] border-[#111] hover:bg-[#45B7D1] transition-colors" aria-label="Search site">⌕ SEARCH</button>}
+          {commandTrigger && <div className="flex items-center border-l-[3px] border-[#111] px-2">{commandTrigger}</div>}
           <button
             data-testid="nav-start-project"
             onClick={onStartProject}
@@ -76,6 +78,7 @@ export default function Nav({ onStartProject }) {
               {l.toUpperCase()}
             </button>
           ))}
+          {onSearch && <button type="button" onClick={onSearch} className="font-mono-label text-[10px] font-bold px-3 border-l-[3px] border-[#111] hover:bg-[#45B7D1] transition-colors" aria-label="Search site">⌕</button>}
           <button
             data-testid="nav-mobile-menu-toggle"
             onClick={() => setOpen(!open)}
