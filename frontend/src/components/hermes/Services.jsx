@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useLang } from "@/lib/i18n";
 import { SectionTag, EASE, Star4, BigArrow } from "./primitives";
+import { track } from "./FeatureOverlays";
 
 const CARD_STYLES = [
   { span: "md:col-span-7", bg: "bg-[#FFE45C]", text: "", rotate: "hover:-rotate-1" },
@@ -28,6 +29,7 @@ export default function Services() {
                 data-testid={`service-card-${i}`}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                onViewportEnter={() => track("service_open", { service: item.name })}
                 viewport={{ once: true, margin: "-10%" }}
                 transition={{ duration: 0.5, delay: (i % 3) * 0.1, ease: EASE }}
                 className={`group ${s.span} ${s.bg} border-[3px] border-[#111] shadow-hard card-press ${s.rotate} p-6 sm:p-8 flex flex-col justify-between min-h-[220px] sm:min-h-[260px] transition-transform`}

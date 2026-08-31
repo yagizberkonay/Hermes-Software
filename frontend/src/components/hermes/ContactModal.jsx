@@ -3,12 +3,42 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useLang } from "@/lib/i18n";
 import { EASE, Star4 } from "./primitives";
+import { HermesLoading } from "./FeatureOverlays";
 
 const makeChallenge = () => {
   const left = Math.floor(Math.random() * 8) + 2;
   const right = Math.floor(Math.random() * 8) + 2;
   return { question: `${left} + ${right}`, answer: String(left + right) };
 };
+
+const validate = (form, t) => {
+  const errors = {};
+  if (!form.name.trim()) errors.name = t.contact.errorRequired || "REQUIRED";
+  if (!form.email.trim()) {
+    errors.email = t.contact.errorRequired || "REQUIRED";
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    errors.email = t.contact.errorEmail || "INVALID EMAIL";
+  }
+  if (!form.message.trim()) errors.message = t.contact.errorRequired || "REQUIRED";
+  return errors;
+};
+
+function FieldError({ id, message }) {
+  if (!message) return null;
+  return (
+    <motion.p
+      id={id}
+      role="alert"
+      initial={{ opacity: 0, y: -4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
+      transition={{ duration: 0.2, ease: EASE }}
+      className="font-mono-label text-[10px] font-bold text-[#FF5C5C] mt-1.5"
+    >
+      ↑ {message}
+    </motion.p>
+  );
+}
 
 export default function ContactModal({ open, onClose, estimate }) {
   const { t, lang } = useLang();
@@ -17,6 +47,9 @@ export default function ContactModal({ open, onClose, estimate }) {
   const [status, setStatus] = useState("idle");
   const [captcha, setCaptcha] = useState(makeChallenge);
   const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [submitted, setSubmitted] = useState(false);
   const closeRef = useRef(null);
 
   const refreshCaptcha = useCallback(() => {
@@ -27,6 +60,9 @@ export default function ContactModal({ open, onClose, estimate }) {
   useEffect(() => {
     if (!open) return;
     setStatus("idle");
+    setErrors({});
+    setTouched({});
+    setSubmitted(false);
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
     };
@@ -38,8 +74,26 @@ export default function ContactModal({ open, onClose, estimate }) {
 
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  const handleBlur = (key) => () => {
+    setTouched((prev) => ({ ...prev, [key]: true }));
+    setErrors(validate(form, t));
+  };
+
+  // Re-validate on form change if already submitted or field touched
+  useEffect(() => {
+    if (submitted || Object.keys(touched).length > 0) {
+      setErrors(validate(form, t));
+    }
+  }, [form, submitted, touched, t]);
+
   const submit = async (e) => {
     e.preventDefault();
+    setSubmitted(true);
+
+    const validationErrors = validate(form, t);
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+
     if (form.website || captchaAnswer.trim() !== captcha.answer) {
       setStatus("error");
       toast.error(t.contact.captchaError);
@@ -62,6 +116,8 @@ export default function ContactModal({ open, onClose, estimate }) {
     setStatus("success");
     toast.success(t.contact.emailDraft);
   };
+
+  const showError = (key) => (touched[key] || submitted) && errors[key];
 
   return (
     <AnimatePresence>
@@ -101,7 +157,7 @@ export default function ContactModal({ open, onClose, estimate }) {
               </button>
             </div>
 
-            {status === "success" ? <div className="p-8 sm:p-12" role="status" aria-live="polite"><div className="border-[3px] border-[#111] bg-[#45B7D1] p-6"><p className="font-display text-5xl leading-none mb-5">RECEIVED.</p><p className="font-display text-3xl">WE'LL TAKE A LOOK.</p><p className="font-semibold mt-6">{t.contact.emailDraft}</p></div><button type="button" onClick={onClose} className="btn-press mt-7 bg-[#111] text-[#F5F0E8] border-[3px] border-[#111] shadow-hard font-display text-xl px-6 py-4">CLOSE →</button></div> : <form onSubmit={submit} className="p-6 space-y-4">
+            {status === "success" ? <div className="p-8 sm:p-12" role="status" aria-live="polite"><div className="border-[3px] border-[#111] bg-[#45B7D1] p-6"><p className="font-display text-5xl leading-none mb-5">RECEIVED.</p><p className="font-display text-3xl">WE'LL TAKE A LOOK.</p><p className="font-semibold mt-6">{t.contact.emailDraft}</p></div><button type="button" onClick={onClose} className="btn-press mt-7 bg-[#111] text-[#F5F0E8] border-[3px] border-[#111] shadow-hard font-display text-xl px-6 py-4" data-testid="contact-success-close">CLOSE →</button></div> : <form onSubmit={submit} className="p-6 space-y-4" noValidate>
               <p className="font-semibold text-sm">{t.contact.sub}</p>
               {estimate && (
                 <p className="font-mono-label text-[10px] font-bold bg-[#45B7D1] border-[3px] border-[#111] inline-block px-3 py-1.5" data-testid="contact-estimate-badge">
@@ -119,14 +175,45 @@ export default function ContactModal({ open, onClose, estimate }) {
                 className="absolute -left-[9999px] w-px h-px opacity-0"
                 data-testid="contact-honeypot"
               />
+
+              {/* Name */}
               <div>
                 <label data-testid="contact-label-name" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-name">{t.contact.name}</label>
-                <input id="c-name" data-testid="contact-input-name" className="input-brutal" required value={form.name} onChange={set("name")} placeholder="ADA LOVELACE" />
+                <input
+                  id="c-name"
+                  data-testid="contact-input-name"
+                  className={`input-brutal ${showError("name") ? "border-[#FF5C5C]" : ""}`}
+                  required
+                  value={form.name}
+                  onChange={set("name")}
+                  onBlur={handleBlur("name")}
+                  placeholder="ADA LOVELACE"
+                  aria-invalid={!!showError("name")}
+                  aria-describedby={showError("name") ? "err-name" : undefined}
+                />
+                <AnimatePresence>{showError("name") && <FieldError id="err-name" message={errors.name} />}</AnimatePresence>
               </div>
+
+              {/* Email */}
               <div>
                 <label data-testid="contact-label-email" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-email">{t.contact.email}</label>
-                <input id="c-email" data-testid="contact-input-email" className="input-brutal" type="email" required value={form.email} onChange={set("email")} placeholder="ADA@EXAMPLE.COM" />
+                <input
+                  id="c-email"
+                  data-testid="contact-input-email"
+                  className={`input-brutal ${showError("email") ? "border-[#FF5C5C]" : ""}`}
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={set("email")}
+                  onBlur={handleBlur("email")}
+                  placeholder="ADA@EXAMPLE.COM"
+                  aria-invalid={!!showError("email")}
+                  aria-describedby={showError("email") ? "err-email" : undefined}
+                />
+                <AnimatePresence>{showError("email") && <FieldError id="err-email" message={errors.email} />}</AnimatePresence>
               </div>
+
+              {/* Project Type */}
               <div>
                 <label data-testid="contact-label-type" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-type">{t.contact.type}</label>
                 <select id="c-type" data-testid="contact-select-type" className="input-brutal" value={form.project_type} onChange={set("project_type")}>
@@ -136,10 +223,26 @@ export default function ContactModal({ open, onClose, estimate }) {
                   ))}
                 </select>
               </div>
+
+              {/* Message */}
               <div>
                 <label data-testid="contact-label-message" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-msg">{t.contact.message}</label>
-                <textarea id="c-msg" data-testid="contact-input-message" className="input-brutal min-h-[110px]" required value={form.message} onChange={set("message")} placeholder="..." />
+                <textarea
+                  id="c-msg"
+                  data-testid="contact-input-message"
+                  className={`input-brutal min-h-[110px] ${showError("message") ? "border-[#FF5C5C]" : ""}`}
+                  required
+                  value={form.message}
+                  onChange={set("message")}
+                  onBlur={handleBlur("message")}
+                  placeholder="..."
+                  aria-invalid={!!showError("message")}
+                  aria-describedby={showError("message") ? "err-message" : undefined}
+                />
+                <AnimatePresence>{showError("message") && <FieldError id="err-message" message={errors.message} />}</AnimatePresence>
               </div>
+
+              {/* Captcha */}
               <div>
                 <label data-testid="contact-label-captcha" className="font-mono-label text-[10px] font-bold block mb-1.5" htmlFor="c-captcha">{t.contact.captchaLabel}</label>
                 <div className="grid grid-cols-[minmax(110px,1fr)_80px_48px] items-stretch gap-2">
@@ -171,13 +274,15 @@ export default function ContactModal({ open, onClose, estimate }) {
                   </button>
                 </div>
               </div>
+
+              {/* Submit */}
               <button
                 type="submit"
                 data-testid="contact-submit"
                 disabled={sending}
-                className="btn-press w-full bg-[#FF5C5C] border-[3px] border-[#111] shadow-hard font-display text-xl px-6 py-4 disabled:opacity-60"
+                className="btn-press w-full bg-[#FF5C5C] border-[3px] border-[#111] shadow-hard font-display text-xl px-6 py-4 disabled:opacity-60 disabled:pointer-events-none"
               >
-                {sending ? t.contact.sending : t.contact.submit}
+                {sending ? <HermesLoading label={t.contact.sending} /> : t.contact.submit}
               </button>
             </form>}
           </motion.div>

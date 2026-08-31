@@ -15,7 +15,10 @@ import Faq from "@/components/hermes/Faq";
 import Cta from "@/components/hermes/Cta";
 import Footer from "@/components/hermes/Footer";
 import ContactModal from "@/components/hermes/ContactModal";
+import NotFound from "@/components/hermes/NotFound";
 import FeatureOverlays, { CommandTrigger, track } from "@/components/hermes/FeatureOverlays";
+
+const PROD_ORIGIN = "https://hermessoftware.space";
 
 function setMeta(name, content, property = false) {
   const selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
@@ -28,21 +31,81 @@ function updateMetadata(lang) {
   const tr = lang === "tr";
   const title = tr ? "Hermes Software — Fikirden Yazılıma" : "Hermes Software — Ideas Into Software";
   const description = tr ? "İstanbul merkezli bağımsız yazılım stüdyosu. Dijital ürünleri tasarlar, geliştirir ve yayına alırız." : "Independent software studio in Istanbul. We design, engineer and ship digital products.";
-  document.title = title;
-  setMeta("description", description);
-  setMeta("og:title", title, true); setMeta("og:description", description, true); setMeta("og:type", "website", true); setMeta("og:url", window.location.origin + window.location.pathname, true);
-  setMeta("twitter:card", "summary_large_image"); setMeta("twitter:title", title); setMeta("twitter:description", description);
-  let canonical = document.head.querySelector("link[rel=canonical]");
-  if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
-  canonical.href = window.location.origin + window.location.pathname;
-  const schema = { "@context": "https://schema.org", "@type": ["Organization", "WebSite"], name: "Hermes Software Inc.", url: window.location.origin, description };
-  let ld = document.head.querySelector("script[data-hermes-schema]");
-  if (!ld) { ld = document.createElement("script"); ld.type = "application/ld+json"; ld.dataset.hermesSchema = "true"; document.head.appendChild(ld); }
-  ld.textContent = JSON.stringify(schema);
-}
+  const locale = tr ? "tr_TR" : "en_US";
+  const canonical = PROD_ORIGIN + "/";
 
-function NotFound() {
-  return <main className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-6"><div className="w-full max-w-2xl border-[4px] border-[#111] shadow-hard-lg bg-[#FFE45C] p-8 sm:p-14"><div className="flex justify-between items-start"><span className="font-mono-label text-xs font-bold">HERMES / ERROR</span><span className="font-display text-5xl" aria-hidden="true">◌</span></div><h1 className="font-display text-[clamp(7rem,24vw,14rem)] leading-[.78] mt-12">404</h1><p className="font-display text-3xl sm:text-5xl mt-12">THIS PAGE SHIPPED WITHOUT US.</p><a href="/" className="btn-press inline-block mt-10 bg-[#FF5C5C] border-[3px] border-[#111] shadow-hard font-display text-2xl px-7 py-4">GO HOME →</a></div></main>;
+  document.title = title;
+
+  // Basic meta
+  setMeta("description", description);
+  setMeta("robots", "index, follow");
+
+  // Open Graph
+  setMeta("og:title", title, true);
+  setMeta("og:description", description, true);
+  setMeta("og:type", "website", true);
+  setMeta("og:url", canonical, true);
+  setMeta("og:site_name", "Hermes Software Inc.", true);
+  setMeta("og:locale", locale, true);
+
+  // Twitter/X
+  setMeta("twitter:card", "summary_large_image");
+  setMeta("twitter:title", title);
+  setMeta("twitter:description", description);
+
+  // Canonical
+  let link = document.head.querySelector("link[rel=canonical]");
+  if (!link) { link = document.createElement("link"); link.rel = "canonical"; document.head.appendChild(link); }
+  link.href = canonical;
+
+  // Structured Data — Organization
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Hermes Software Inc.",
+    url: PROD_ORIGIN,
+    description,
+    email: "info@hermessoftware.space",
+    foundingDate: "2025",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Istanbul",
+      addressCountry: "TR",
+    },
+    sameAs: [
+      "https://instagram.com/hermes.software",
+    ],
+  };
+
+  // Structured Data — WebSite
+  const siteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Hermes Software",
+    url: PROD_ORIGIN,
+    description,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: PROD_ORIGIN + "/?q={search_term_string}",
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  // Insert / update JSON-LD
+  let ldOrg = document.head.querySelector('script[data-hermes-schema="org"]');
+  if (!ldOrg) { ldOrg = document.createElement("script"); ldOrg.type = "application/ld+json"; ldOrg.dataset.hermesSchema = "org"; document.head.appendChild(ldOrg); }
+  ldOrg.textContent = JSON.stringify(orgSchema);
+
+  let ldSite = document.head.querySelector('script[data-hermes-schema="site"]');
+  if (!ldSite) { ldSite = document.createElement("script"); ldSite.type = "application/ld+json"; ldSite.dataset.hermesSchema = "site"; document.head.appendChild(ldSite); }
+  ldSite.textContent = JSON.stringify(siteSchema);
+
+  // Remove old combined schema if exists
+  const oldLd = document.head.querySelector('script[data-hermes-schema="true"]');
+  if (oldLd) oldLd.remove();
 }
 
 function HomePage() {

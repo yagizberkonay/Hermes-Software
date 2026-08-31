@@ -55,7 +55,17 @@ export default function Nav({ onStartProject, onSearch, commandTrigger }) {
               </button>
             ))}
           </div>
-          {onSearch && <button type="button" onClick={onSearch} className="font-mono-label text-[10px] font-bold px-3 border-l-[3px] border-[#111] hover:bg-[#45B7D1] transition-colors" aria-label="Search site">⌕ SEARCH</button>}
+          {onSearch && (
+            <button
+              type="button"
+              data-testid="nav-search-btn"
+              onClick={onSearch}
+              className="font-mono-label text-[10px] font-bold px-3 border-l-[3px] border-[#111] hover:bg-[#45B7D1] transition-colors"
+              aria-label="Search site"
+            >
+              ⌕ SEARCH
+            </button>
+          )}
           {commandTrigger && <div className="flex items-center border-l-[3px] border-[#111] px-2">{commandTrigger}</div>}
           <button
             data-testid="nav-start-project"
@@ -78,7 +88,22 @@ export default function Nav({ onStartProject, onSearch, commandTrigger }) {
               {l.toUpperCase()}
             </button>
           ))}
-          {onSearch && <button type="button" onClick={onSearch} className="font-mono-label text-[10px] font-bold px-3 border-l-[3px] border-[#111] hover:bg-[#45B7D1] transition-colors" aria-label="Search site">⌕</button>}
+          {onSearch && (
+            <button
+              type="button"
+              data-testid="nav-search-btn-mobile"
+              onClick={onSearch}
+              className="font-mono-label text-[10px] font-bold px-3 border-l-[3px] border-[#111] hover:bg-[#45B7D1] transition-colors"
+              aria-label="Search site"
+            >
+              ⌕
+            </button>
+          )}
+          {commandTrigger && (
+            <div className="flex items-center border-l-[3px] border-[#111] px-1.5" data-testid="nav-command-mobile">
+              {commandTrigger}
+            </div>
+          )}
           <button
             data-testid="nav-mobile-menu-toggle"
             onClick={() => setOpen(!open)}
