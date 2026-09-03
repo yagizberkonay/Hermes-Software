@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useLang } from "@/lib/i18n";
 import { SectionTag, EASE, Star4, BigArrow } from "./primitives";
 import ShareButton from "./ShareButton";
-import { track } from "./FeatureOverlays";
+import { track } from "@/lib/analytics";
 
 const ACCENTS = ["#FFE45C", "#45B7D1", "#FF5C5C", "#111"];
 const CLIPS = [
@@ -24,7 +24,10 @@ const ProjectRow = ({ project, index }) => {
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-12%" }}
-      onViewportEnter={() => track("work_open", { title: project.title })}
+      onViewportEnter={() => {
+        track("work_open", { title: project.title });
+        track("case_study_open", { title: project.title });
+      }}
       transition={{ duration: 0.6, ease: EASE }}
       className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
     >
@@ -86,13 +89,13 @@ export default function Work({ onStartProject }) {
 
   // Extract unique categories from actual project content
   const categories = useMemo(() => {
-    const set = new Set(t.work.projects.map((p) => p.category));
+    const set = new Set(t.work.projects.map((p) => p.filter).filter(Boolean));
     return ["ALL", ...Array.from(set)];
   }, [t]);
 
   const filteredProjects = useMemo(() => {
     if (selectedCategory === "ALL") return t.work.projects;
-    return t.work.projects.filter((p) => p.category === selectedCategory);
+    return t.work.projects.filter((p) => p.filter === selectedCategory);
   }, [t, selectedCategory]);
 
   const handleCategoryChange = (cat) => {

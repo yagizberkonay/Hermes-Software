@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useLang } from "@/lib/i18n";
 import { SectionTag, EASE, Star4, BigArrow } from "./primitives";
-import { track } from "./FeatureOverlays";
+import { track } from "@/lib/analytics";
 
 const CARD_STYLES = [
   { span: "md:col-span-7", bg: "bg-[#FFE45C]", text: "", rotate: "hover:-rotate-1" },

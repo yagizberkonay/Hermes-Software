@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "sonner";
 import { EASE } from "./primitives";
-import { track } from "./FeatureOverlays";
+import { track } from "@/lib/analytics";
 
 /**
  * Compact share button with Web Share API + fallback dropdown.
@@ -37,17 +37,25 @@ export default function ShareButton({ title, text, url }) {
   const handleShare = async () => {
     track("share_click", { title });
 
-    // Try native Web Share API first
     if (navigator.share) {
       try {
         await navigator.share({ title, text: text || title, url: shareUrl });
         return;
       } catch {
-        // User cancelled or API failed — fall through to dropdown
+        // User cancelled — fall through to dropdown
       }
     }
 
     setOpen((v) => !v);
+  };
+
+  const nativeShare = async () => {
+    try {
+      await navigator.share({ title, text: text || title, url: shareUrl });
+    } catch {
+      /* cancelled */
+    }
+    close();
   };
 
   const copyLink = async () => {
@@ -79,6 +87,7 @@ export default function ShareButton({ title, text, url }) {
   };
 
   const items = [
+    ...(navigator.share ? [["SHARE", nativeShare, "share-native"]] : []),
     ["COPY LINK", copyLink, "share-copy"],
     ["SHARE ON X", shareX, "share-x"],
     ["SHARE ON LINKEDIN", shareLinkedIn, "share-linkedin"],
