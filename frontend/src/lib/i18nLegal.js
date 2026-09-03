@@ -1,0 +1,91 @@
+export const legalEn = {
+  legal: {
+    privacyPolicy: "Privacy Policy",
+    kvkk: "KVKK Notice",
+    cookies: "Cookies",
+    terms: "Terms of Service",
+    playgroundTerms: "Playground Terms",
+    privacySettings: "Privacy Settings",
+    californiaPrivacy: "California Privacy",
+    privacyRequest: "Privacy Request",
+  },
+  consent: {
+    title: "PRIVACY PREFERENCES",
+    message: "We use necessary technologies to run our website securely. We do not currently use optional tracking, analytics, or advertising cookies, but if we do in the future, you can manage your preferences here.",
+    necessary: "STRICTLY NECESSARY",
+    necessaryDesc: "Required for the website to function (security, network management). Cannot be disabled.",
+    analytics: "ANALYTICS",
+    analyticsDesc: "Allows us to count visits and traffic sources.",
+    marketing: "MARKETING & ADVERTISING",
+    marketingDesc: "Used to deliver targeted advertisements and track marketing performance.",
+    acceptAll: "ACCEPT ALL",
+    savePreferences: "SAVE PREFERENCES",
+    rejectOptional: "REJECT OPTIONAL",
+  },
+  privacyRequest: {
+    title: "PRIVACY REQUEST",
+    desc: "Submit a request regarding your personal data.",
+    typeLabel: "REQUEST TYPE",
+    types: {
+      access: "Data Access Request",
+      deletion: "Data Deletion Request",
+      correction: "Data Correction Request",
+      optout: "Opt-Out of Marketing/Tracking",
+      question: "General Privacy Question",
+    },
+    messageLabel: "DETAILS",
+    messagePlaceholder: "Please provide any necessary context.",
+    submit: "SUBMIT REQUEST",
+    success: "Request received. We will respond within legally required timeframes.",
+  },
+  documents: {
+    lastUpdated: "Last Updated",
+    requiresConfirmation: "[REQUIRES CONFIRMATION]",
+  }
+};
+
+export const legalTr = {
+  legal: {
+    privacyPolicy: "Gizlilik Politikası",
+    kvkk: "KVKK Aydınlatma Metni",
+    cookies: "Çerezler",
+    terms: "Kullanım Koşulları",
+    playgroundTerms: "Playground Koşulları",
+    privacySettings: "Gizlilik Tercihleri",
+    californiaPrivacy: "California Gizlilik Hakları",
+    privacyRequest: "Gizlilik Talebi",
+  },
+  consent: {
+    title: "GİZLİLİK TERCİHLERİ",
+    message: "Web sitemizi güvenli bir şekilde çalıştırmak için zorunlu teknolojiler kullanıyoruz. Şu anda isteğe bağlı izleme veya reklam çerezleri kullanmıyoruz, ancak ileride kullanırsak tercihlerinizi buradan yönetebilirsiniz.",
+    necessary: "KESİNLİKLE ZORUNLU",
+    necessaryDesc: "Web sitesinin çalışması için gereklidir (güvenlik, ağ yönetimi). Kapatılamaz.",
+    analytics: "ANALİTİK",
+    analyticsDesc: "Ziyaretleri ve trafik kaynaklarını saymamıza olanak tanır.",
+    marketing: "PAZARLAMA & REKLAM",
+    marketingDesc: "Hedeflenmiş reklamlar sunmak ve pazarlama performansını ölçmek için kullanılır.",
+    acceptAll: "TÜMÜNÜ KABUL ET",
+    savePreferences: "TERCİHLERİ KAYDET",
+    rejectOptional: "İSTEĞE BAĞLI OLANLARI REDDET",
+  },
+  privacyRequest: {
+    title: "GİZLİLİK TALEBİ",
+    desc: "Kişisel verilerinizle ilgili bir talep gönderin.",
+    typeLabel: "TALEP TÜRÜ",
+    types: {
+      access: "Veri Erişim Talebi",
+      deletion: "Veri Silme Talebi",
+      correction: "Veri Düzeltme Talebi",
+      optout: "Pazarlama/İzleme İptali",
+      question: "Genel Gizlilik Sorusu",
+    },
+    messageLabel: "DETAYLAR",
+    messagePlaceholder: "Lütfen gerekli bağlamı sağlayın.",
+    submit: "TALEBİ GÖNDER",
+    success: "Talebiniz alındı. Yasal süreler içinde dönüş yapacağız.",
+  },
+  documents: {
+    lastUpdated: "Son Güncelleme",
+    requiresConfirmation: "[ONAY BEKLİYOR]",
+  }
+};
