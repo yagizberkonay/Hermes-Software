@@ -1,6 +1,9 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Hermes Software Inc.",
+  "short_name": "Hermes",
+  "description": "Independent software studio in Istanbul designing, engineering and shipping digital products.",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +18,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "background_color": "#F5F0E8",
   "display": "standalone"
 }
