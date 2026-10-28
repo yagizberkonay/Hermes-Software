@@ -100,6 +100,7 @@ a:focus-visible, select:focus-visible { outline: 4px solid var(--signal); outlin
 .core-cell h1 i { font-style: normal; color: var(--ink); }
 .hero-tagline { position: relative; z-index: 1; max-width: 25ch; margin: 0; font-size: clamp(1.1rem, 1.75vw, 1.8rem); font-weight: 600; letter-spacing: -.045em; line-height: 1.08; }
 .hero-statement { position: relative; z-index: 1; max-width: 42ch; margin: 1.2rem 0 0; font: 500 .72rem/1.55 var(--mono); }
+.hero-ecosystem { position: relative; z-index: 1; max-width: 42ch; margin: 1rem 0 0; padding-top: .75rem; border-top: 2px solid var(--ink); color: var(--muted-foreground); font: 700 .52rem/1.45 var(--mono); letter-spacing: .095em; }
 .outline-link { position: relative; z-index: 1; margin-top: 1.6rem; display: inline-flex; align-items: center; gap: .85rem; border: 3px solid var(--ink); background: var(--paper); padding: .8rem .95rem; box-shadow: 4px 4px 0 var(--ink); font: 700 .65rem/1.1 var(--mono); letter-spacing: .08em; text-transform: uppercase; transition: transform 160ms ease-out, background 160ms ease-out, box-shadow 160ms ease-out; }
 .outline-link:hover { background: var(--signal); transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
 .outline-link:active { transform: translate(5px, 5px) scale(.97); box-shadow: none; }

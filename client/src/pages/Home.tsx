@@ -42,6 +42,7 @@ type Copy = {
   eyebrow: string;
   tagline: string;
   heroStatement: string;
+  ecosystemLine?: string;
   openBlueprint: string;
   terminalKicker: string;
   terminalTitle: string;
@@ -70,22 +71,23 @@ const copy: Record<Locale, Copy> = {
     navProjects: "Projects",
     navOutput: "Output",
     eyebrow: "INDEPENDENT SOFTWARE ARCHITECT · HERMES SOFTWARE",
-    tagline: "Software Architect. Engineering Digital Ecosystems.",
-    heroStatement: "A precise practice for local-first tools, AI systems and interfaces with structural intent.",
+    tagline: "Software engineer, founder, and product builder.",
+    heroStatement: "I design products, make architectural decisions, and turn complex operational ideas into working software across the Hermes ecosystem.",
+    ecosystemLine: "HERMES SOFTWARE · CONSTRUCTION · LEGAL · THEMIS AI · MERIDIAN CORP.",
     openBlueprint: "Open the project blueprint",
     terminalKicker: "02 / SYSTEM MANIFESTO",
     terminalTitle: "The Terminal",
-    manifesto: "Code is not just a tool; it is the architecture of thought.",
+    manifesto: "The product is the system: its decisions, constraints, interfaces, and operating rhythm.",
     terminalFootnote: "All signals nominal. Creative constraints enabled.",
     scaleKicker: "03 / SCALE REPORT",
-    scaleLabel: "Hermes Software Active Ecosystems",
-    scaleFootnote: "A counter used as a declaration of direction, not telemetry.",
+    scaleLabel: "Hermes Software / connected product work",
+    scaleFootnote: "A directional marker for a growing product practice, not a claim about revenue or usage.",
     projectsKicker: "04 / SELECTED SYSTEMS",
     projectsTitle: "Blueprint archive",
-    projectIntro: "Six systems, each shaped around a different operational question.",
+    projectIntro: "A working archive of interfaces, AI experiments, desktop systems, and product infrastructure.",
     outputKicker: "05 / OUTPUT CHANNEL",
     outputTitle: "Build a signal.",
-    outputIntro: "For architecture, experimentation, or the next difficult interface — send a line.",
+    outputIntro: "For a product system, an architectural question, or the next difficult interface — send a line.",
     instagram: "Instagram",
     whatsapp: "WhatsApp",
     github: "GitHub",
@@ -105,22 +107,23 @@ const copy: Record<Locale, Copy> = {
     navProjects: "Projeler",
     navOutput: "İletişim",
     eyebrow: "BAĞIMSIZ YAZILIM MİMARI · HERMES SOFTWARE",
-    tagline: "Yazılım Mimarı. Dijital Ekosistemleri Tasarlıyor.",
-    heroStatement: "Yerel-öncelikli araçlar, yapay zekâ sistemleri ve yapısal amacı olan arayüzler için hassas bir pratik.",
+    tagline: "Yazılım mühendisi, kurucu ve ürün geliştirici.",
+    heroStatement: "Ürün tasarlıyor, mimari kararlar alıyor ve karmaşık operasyonel fikirleri Hermes ekosisteminde çalışan yazılımlara dönüştürüyorum.",
+    ecosystemLine: "HERMES SOFTWARE · CONSTRUCTION · LEGAL · THEMIS AI · MERIDIAN CORP.",
     openBlueprint: "Proje planını aç",
     terminalKicker: "02 / SİSTEM MANİFESTOSU",
     terminalTitle: "Terminal",
-    manifesto: "Kod yalnızca bir araç değildir; düşüncenin mimarisidir.",
+    manifesto: "Ürün; kararları, kısıtları, arayüzleri ve çalışma ritmiyle birlikte bir sistemdir.",
     terminalFootnote: "Tüm sinyaller nominal. Yaratıcı kısıtlar etkin.",
     scaleKicker: "03 / ÖLÇEK RAPORU",
-    scaleLabel: "Hermes Software Aktif Ekosistemleri",
-    scaleFootnote: "Telemetri değil, yönü tanımlayan bir sayaç.",
+    scaleLabel: "Hermes Software / bağlı ürün çalışmaları",
+    scaleFootnote: "Gelir veya kullanım iddiası değil, büyüyen ürün pratiğinin yön işareti.",
     projectsKicker: "04 / SEÇİLMİŞ SİSTEMLER",
     projectsTitle: "Plan arşivi",
-    projectIntro: "Her biri farklı bir operasyonel soruya göre şekillenen altı sistem.",
+    projectIntro: "Arayüzleri, yapay zekâ deneylerini, masaüstü sistemlerini ve ürün altyapısını bir araya getiren çalışma arşivi.",
     outputKicker: "05 / ÇIKIŞ KANALI",
     outputTitle: "Bir sinyal kurun.",
-    outputIntro: "Mimari, deney veya bir sonraki zor arayüz için bir satır bırakın.",
+    outputIntro: "Bir ürün sistemi, mimari soru veya bir sonraki zor arayüz için bir satır bırakın.",
     instagram: "Instagram",
     whatsapp: "WhatsApp",
     github: "GitHub",
@@ -632,6 +635,7 @@ export default function Home() {
           <p className="eyebrow">{text.eyebrow}</p>
           <h1>YAĞIZ<br />BERK<br /><i>ÖNAY</i></h1>
           <p className="hero-tagline">{text.tagline}</p>
+          {text.ecosystemLine && <p className="hero-ecosystem">{text.ecosystemLine}</p>}
           <p className="hero-statement">{text.heroStatement}</p>
           <a href="#projects" className="outline-link">
             <span>{text.openBlueprint}</span>
